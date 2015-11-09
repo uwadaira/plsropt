@@ -7,7 +7,7 @@ RPubs.html
 peachNIR.csv
 peachVIS-NIR.csv
 PLSR_auto/
-PLSR_result/
+PLS_result/
 *.Rproj
 *.pptx
 
