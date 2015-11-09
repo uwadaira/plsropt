@@ -109,7 +109,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     #par(cex = 0.7)
   }
 
-  #par(mfrow=c(2,2))
+  par(mfrow=c(2,2))
 
   # Cross-validation plot
   plot(result, "validation", main="Cross-validation", legendpos = "topright")
