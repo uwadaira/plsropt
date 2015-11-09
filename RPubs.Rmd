@@ -1,0 +1,174 @@
+---
+title: "R package 'plsropt'"
+
+date: "November 5, 2015"
+author: "Yasuhiro Uwadaira"
+output: html_document
+---
+
+The partial least squares (PLS) regressions can be performed by using the function `plsr` in **pls** package. The **plsropt** package was developed to perform `plsr` under different combinations of X-variable range and preprocessing method automatically and compare the results easily.
+
+* The X-variable ranges can be optionally specified.
+* Total 16 ($2*4*2$) kinds of preprocessing methods are applied to the X-variables data set.
+    + First, standard normal variate (SNV) is applied or not.
+    + Second, Savitzky-Golay smoothing, 1st derivative or 2nd derivative is applied or not, respectively.
+    + Finally, auto-scaling is applied or not.
+
+By running `plsrauto`, you can easily find the best condition of the PLS regression.
+
+# 1. Preparing data set
+
+## How to import CSV files
+
+A data set needs to contain the objective variables (Y-varialbes) and the explanatory variables (X-variables, ex. spectral data).
+Specifically, 1st colmun of the data set must be sample name and Y-variabes and X-variables are listed as this order.
+For example, CSV files can be imported as follows:
+
+```{r echo=FALSE}
+library(plsropt)
+```
+
+```{r eval=FALSE}
+# read "filename.csv" from the current working directory
+datAll <- read.csv(file = "./filename.csv", row.names = 1, check.names = F)
+```
+
+The data set is imported as an object of class `data.frame`.
+
+The X-variable data set `x` is easily extracted from `datAll` using `extdat` function. A argument `start` is 1st column name of X-variable data set and `end` is last one.
+
+```{r eval=FALSE}
+# extract X-variable data set
+x <- extdat(datAll, start = 700, end = 2498)
+```
+
+Reintegrate X-variable data set `x` with Y-variable data set in `datAll` using `I()` to fit the data structure to the PLS regression function.
+
+```{r eval=FALSE}
+# reintegrate Y-variable data set with X-variable data set.
+dat <- data.frame(datAll[, 1:2], NIR = I(x))
+```
+
+## Load a example data set
+
+A example data set `peach` is included in **plsropt** package. `peach` consists of Brix, firmness and near-infrared spectra (NIR) of 74 peach fruits. Each NIR spectrum consists of 900 diffuse reflectance measurements from 700 to 2498 nm.
+
+`peach` can be loaded and NIR spectra can be plotted as follows:
+
+```{r}
+# load a example data
+data(peach)
+
+# plot NIR spectra
+matplot(colnames(peach$NIR), t(peach$NIR), type = "l", lty = 1,
+        xlab = "wavelength (nm)", ylab = "log(1/R)", main = "NIR spectra of intact peach fruits")
+```
+
+
+# 2. Perform PLS regressions automatically
+
+Set explanatory variable ranges as a `list` object. 
+
+```{r}
+# X-variable ranges
+xrange <- list(c(700, 1098), c(1100, 2498))
+```
+
+Divide the data set into training and test data set.
+
+```{r}
+datTrain <- peach[1:50, ]
+datTest  <- peach[51:74, ]
+```
+
+Run function `plsrauto`.
+
+```{r, eval=FALSE}
+result.all <- plsrauto(Brix ~ NIR, data = datTrain, testdata = datTest, xrange = xrange, 
+                       validation = "CV", segment.type ="interleaved")
+```
+
+`validation` and `segment.type` are the arguments of function `plsr` in **pls** package.
+Other arguments of `plsr` are also available.
+
+`plsrauto` returns the results under different combinations of X-variable range and preprocessing method as follows:
+
+```
+> result.all[1:5,]
+     Xrange                                  Preprocessing  N ncomp     R.cal     R.val
+1 1100-2498 SNV + SG2D(wsize-11pt_forder-2) + Auto-scaling 50     5 0.9380196 0.8669775
+2 1100-2498                Raw + SG2D(wsize-11pt_forder-2) 50     6 0.9029612 0.7989809
+3  700-1098 SNV + SG2D(wsize-11pt_forder-2) + Auto-scaling 50     4 0.9273898 0.8963079
+4 1100-2498                SNV + SG2D(wsize-11pt_forder-2) 50     5 0.8898827 0.8007598
+5  700-1098                Raw + SG2D(wsize-11pt_forder-2) 50     6 0.9310459 0.8827897
+        SEC      SECV      Bias.val  RPD.val N.test    R.test       SEP   Bias.test RPD.test
+1 0.3557418 0.5167114 -0.0009736606 2.006632     24 0.8806564 0.6286943  0.07409818 1.942422
+2 0.4410791 0.6235664  0.0076535061 1.662773     24 0.8681753 0.6905937 -0.35334664 1.768319
+3 0.3839833 0.4603071  0.0107676706 2.252517     24 0.8641117 0.6137294  0.09560517 1.989785
+4 0.4682459 0.6211154 -0.0190375989 1.669335     24 0.8530066 0.6774389 -0.26276194 1.802657
+5 0.3745461 0.4902328  0.0289515275 2.115015     24 0.8507464 0.6428760  0.13236342 1.899573
+```
+`result.all` is ouput as a CSV file in "./PLSR_auto/Brix".
+
+`result.all` is sorted by the correlation coefficient of validation set `R.val` (or `R.test` if test set is used). In this case, the combination of X-variable range "1100-2498"" and prerocessing "SNV + SG2D(wsize-11pt_forder-2) + Auto-scaling" shows the highest `R.test`.
+
+If `output = TRUE`, the plots and numerical data of the result are output as PDF and CSV files in a directory, for example "./PLS_auto/Brix/1100-2498/SNV + SG2D(wsize-11pt_forder-2) + Auto-scaling". All results under different conditions are ouput in the directories named same manner.
+
+# 3. Perform the PLS regression under the best condition
+
+By runing `plsrauto`, you can find the best combination of X-variable range and preprocessing method. The best PLS regression model can be built step by step as follows:
+
+## Extract X-variables
+
+```{r}
+x <- extdat(peach$NIR, start = 1100, end = 2498)
+```
+
+## Apply the preprocessing method
+
+```{r}
+# Standard normal variate (SNV)
+x <- snv(x)
+
+# Savitzky-Golay second derivative
+x <- matsgolay(x, p = 2, n = 11)
+
+# Auto-scaling
+x <- autoscaling(x$second.d)
+```
+
+## Perform the PLS regression
+
+Reintegrate `x` with Y-variable contained in `datAll`. 
+
+```{r}
+dat <- data.frame(peach[, 1:2], NIR = I(x))
+```
+
+Divide the data set into training and test data set.
+
+```{r}
+datTrain <- dat[1:50, ]
+datTest  <- dat[51:74, ]
+```
+
+`plsrPlot` performs the partial least squares regression by using the function `plsr` in **pls** package.
+
+`plsrPlot` draws four kinds of plots at once.
+
+* cross-validation
+* variable importance [regression coefficient and variable importance in projection]
+* loading
+* actual vs. predicted value)
+
+These plots are important and useful to interpret the result.
+
+If `output = TRUE`, the plots and numerical data of the result are output as PDF and CSV files in a directory of "./PLS_result/Brix". 
+
+```{r}
+result <- plsrPlot(Brix ~ NIR, data = datTrain, testdata = datTest,
+                   ncomp = "auto", maxcomp = 10,
+                   validation = "CV", segment.type ="interleaved",
+                   output = FALSE)
+```
+

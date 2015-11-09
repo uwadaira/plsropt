@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+sample_code.R
+RPubs.Rmd
+RPubs.html
+peachNIR.csv
+peachVIS-NIR.csv
+PLSR_auto/
+PLS_result/
+*.Rproj
+*.pptx
+

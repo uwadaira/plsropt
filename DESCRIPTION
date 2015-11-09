@@ -1,0 +1,12 @@
+Package: plsropt
+Type: Package
+Title: Automatically perform partial least squares (PLS) regressions under different combinations of X-variable range and preprocessing method.
+Version: 0.1
+Date: 2015-11-09
+Author: Yasuhiro Uwadaira
+Maintainer: Yasuhiro Uwadaira <uwa7878@gmail.com>
+Description: Perform PLS regressions under different combinations of X-variable range and preprocessing method. A table of all results is output as a CSV file. Important plots and numerical result of each model can be output to the apropriate directory.
+License: MIT + file LICENSE
+LazyData: TRUE
+Suggests: testthat
+Imports:  pls, signal, utils
