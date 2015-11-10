@@ -10,6 +10,5 @@ License: MIT + file LICENSE
 LazyData: TRUE
 Suggests: testthat
 Imports:  pls, signal, utils
-
 URL: http://github.com/uwadaira/plsropt
 BugReports: http://github.com/uwadaira/plsropt/issues
