@@ -105,8 +105,6 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     dir <- paste(dir, subdir, sep = "/")
     dir.create(dir, showWarnings = FALSE, recursive = TRUE)
     pdf(paste(dir, "PLS_plots.pdf", sep="/"), width=9, height=9)
-  }else{
-    #par(cex = 0.7)
   }
 
   par(mfrow=c(2,2))
