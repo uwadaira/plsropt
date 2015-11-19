@@ -87,18 +87,20 @@ plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, ...){
 
     for(i in preproc1){
       if(i == "SNV") xAllSub <- snv(xAllSub)
-      xAllSub.sg <- matsgolay(x = xAllSub, p = p, n = n)
+      xAllSub.sgsm <- matsgolay(x = xAllSub, p = p, n = n, m = 0)
+      xAllSub.sg1d <- matsgolay(x = xAllSub, p = p, n = n, m = 1)
+      xAllSub.sg2d <- matsgolay(x = xAllSub, p = p, n = n, m = 2)
       prename1 <- i
 
       for(j in preproc2){
         if(j == preproc2[1]){
           xUse <- xAllSub
         }else if(j == preproc2[2]){
-          xUse <- xAllSub.sg$sm
+          xUse <- xAllSub.sgsm
         }else if(j == preproc2[3]){
-          xUse <- xAllSub.sg$first.d
+          xUse <- xAllSub.sg1d
         }else if(j == preproc2[4]){
-          xUse <- xAllSub.sg$second.d
+          xUse <- xAllSub.sg2d
         }
         if(j != preproc2[1]){
           prename2 <- paste(prename1, j, sep = " + ")

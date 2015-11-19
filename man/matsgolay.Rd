@@ -4,23 +4,23 @@
 \alias{matsgolay}
 \title{Savitzky-Golay smoothing, 1st/2nd derivative}
 \usage{
-matsgolay(x, p = 2, n = 11)
+matsgolay(x, ...)
 }
 \arguments{
 \item{x}{x m-by-n data of class \code{data.frame} or \code{matrix} to be filtered. m is the number of samples (observations) and n is the number of variables.}
 
-\item{p}{filter order for Savitzky-Golay smoothing}
-
-\item{n}{filter length (window size) for Savitzky-Golay smoothing (must be odd. default value is 11)}
+\item{...}{additional arguments passed to the \code{\link{sgolayfilt}} in 'signal' package.}
 }
 \value{
 an object of class \code{list} containing the smoothed, 1st derivative and 2nd derivative data
 }
 \description{
-The function \code{matsgolay} applys Savitzky-Golay smoothing, 1st/2nd derivative to the data by using \link{\code{sgolayfilt}} in 'signal' package.
+The function \code{matsgolay} applys Savitzky-Golay smoothing, 1st derivative or 2nd derivative to
+an object of class \code{matrix} or \code{data.frame} by using \link{\code{sgolayfilt}} in 'signal' package.
 }
 \examples{
-x.sg <- mysgolay(x, p = 2, n = 11)
+# Apply a Savitzky-Golay smoothing & 1st derivative to a matirx \\code{dat}
+dat.sg1d <- mysgolay(dat, p = 2, n = 11, m = 1)
 }
 \seealso{
 \code{\link{sgolayfilt}}

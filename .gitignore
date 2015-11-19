@@ -2,12 +2,14 @@
 .Rhistory
 .RData
 sample_code.R
-RPubs.Rmd
-RPubs.html
+*.Rmd
+*.html
 peachNIR.csv
 peachVIS-NIR.csv
 PLSR_auto/
 PLSR_result/
+figures/
+RPubs/
 *.Rproj
 *.pptx
 
