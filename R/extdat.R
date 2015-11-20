@@ -14,6 +14,7 @@
 extdat <- function(x, start, end){
 
   x2 <- x[, which(colnames(x)==start) : which(colnames(x)==end)]
+  x2 <- as.matrix(x2)
 
   return(x2)
 }

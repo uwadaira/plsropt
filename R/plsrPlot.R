@@ -156,8 +156,6 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 ### Save the result
 
   if(output == TRUE){
-    if(is.null(testdata)) dev.off()
-
     write.csv(stats,
               paste(dir, "stats.csv", sep="/"), row.names=FALSE)
     write.csv(data.frame(sample=rownames(x), y, yhat.cal, yhat.val),
@@ -168,10 +166,13 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
               paste(dir, "vip.csv", sep="/"))
     write.csv(loading.weights(result)[,1:ncomp],
               paste(dir,"loading.csv", sep="/"))
-    write.csv(stats.test,
-              paste(dir, "stats_test.csv", sep="/"), row.names=FALSE)
-    write.csv(data.frame(sample=rownames(x.test), y.test, yhat.test),
-              paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
+
+    if(!is.null(testdata)){
+      write.csv(stats.test,
+                paste(dir, "stats_test.csv", sep="/"), row.names=FALSE)
+      write.csv(data.frame(sample=rownames(x.test), y.test, yhat.test),
+                paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
+    }
 
     # Save Bland-Altman plot for outlier detection
     pdf(paste(dir, "BA_plot.pdf", sep="/"), width=6, height=5)
