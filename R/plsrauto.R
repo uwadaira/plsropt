@@ -73,7 +73,7 @@ plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, ...){
   ### Run PLS regressions automatically
   result.all <- c()
 
-  if(is.null(xrange)) xrange <- list(range(as.numeric(colnames(x))))
+  if(is.null(xrange)) xrange <- list(range(as.numeric(colnames(xTrain))))
 
   # Preprocessing methods
   sgpara <- paste("(wsize-", n, "pt_forder-", p, ")", sep = "")
