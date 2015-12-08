@@ -142,7 +142,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 
   # Loading plot
   colsld <- seq(1, ncomp, by=1)
-  par(mar=c(5,4,4,4) + 0.1)
+  par(mar=c(5,4,4,5) + 0.1)
   matplot(xvar, loading.weights(result)[,1:ncomp], type="l", lty=1, col=colsld, xlab="variable", ylab="", main="Loading")
   abline(h=0, lty=2)
   par(xpd=T)
