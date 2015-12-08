@@ -84,7 +84,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     yhat.test <- predict(result, ncomp = ncomp, newdata = as.matrix(x.test))
 
     Bias.test <- mean(y.test - yhat.test)
-    SEP       <- sqrt(sum((y.test - yhat.test)^2)/length(y.test))
+    SEP       <- sqrt(sum((y.test - yhat.test-Bias.test)^2)/(length(y.test)-1))
     RPD.test  <- sd(y.test)/SEP
 
     stats.test <- data.frame(stats, N.test=length(y.test), R.test=cor(y.test, yhat.test), SEP, Bias.test, RPD.test)
