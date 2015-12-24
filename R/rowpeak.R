@@ -1,4 +1,4 @@
-#' @title the number of rows with high and low peak values
+#' @title Number of rows with high and low peak value
 #'
 #' @param x an object of class \code{vector}
 #'

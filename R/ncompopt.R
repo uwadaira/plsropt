@@ -1,4 +1,4 @@
-#' @title Determining the optimun number of components to include in the model
+#' @title Determine the optimun number of components to include in the model
 #'
 #' @description The function \code{ncompopt} determines the optimum number of components to include the model.
 #'

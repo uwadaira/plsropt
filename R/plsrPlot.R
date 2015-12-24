@@ -1,4 +1,4 @@
-#' @title Drawing important plots for the partial least squares regression at once
+#' @title Draw important plots for the partial least squares regression at once
 #'
 #' @description The function \code{plsrPlot} performs the partial least squares (PLS) regression by using the function \code{\link{plsr}} in 'pls' package and draws four kinds of plots
 #' (cross-validation, variable importance [regression coefficient and variable importance in projection], loading, actual vs. predicted value) at once.

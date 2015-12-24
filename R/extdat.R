@@ -1,4 +1,4 @@
-#' @title Extracting the specific range of column from a data set.
+#' @title Extract the specific range of column from a data set.
 #'
 #' @param x an object of class \code{data.frame} or \code{matrix}.
 #' @param start name of the 1st column of new data set to be extracted.
