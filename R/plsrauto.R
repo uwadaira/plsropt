@@ -110,7 +110,7 @@ plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, ...){
 
         for(k in preproc3){
           if(k == "Auto-scaling"){
-            xUse <- autoscaling(xUse)
+            xUse <- scale(xUse, center = TRUE, scale = TRUE)
             prename3 <- paste(prename2, k, sep = " + ")
           }else{
             prename3 <- prename2
