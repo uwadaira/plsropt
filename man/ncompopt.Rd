@@ -2,7 +2,7 @@
 % Please edit documentation in R/ncompopt.R
 \name{ncompopt}
 \alias{ncompopt}
-\title{Determining the optimun number of components to include in the model}
+\title{Determine the optimun number of components to include in the model}
 \usage{
 ncompopt(x)
 }

@@ -62,12 +62,16 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 
   yhat.cal <- result$fitted.values[, , ncomp]
   yhat.val <- result$validation$pred[, , ncomp]
+
+  result.val.lm <- lm(yhat.val ~ y)
+  Slope.val <- result.val.lm$coefficients[2]
+
   Bias.val <- mean(y - yhat.val)
   SEC      <- sqrt(sum((y - yhat.cal)^2)/length(y))
   SECV     <- sqrt(sum((y - yhat.val - Bias.val)^2)/(length(y)-1))
   RPD.val  <- sd(y)/SECV
 
-  stats <- data.frame(N=length(y), ncomp, R.cal=cor(y, yhat.cal), R.val=cor(y, yhat.val), SEC, SECV, Bias.val, RPD.val)
+  stats <- data.frame(N=length(y), ncomp, R.cal=cor(y, yhat.cal), R.val=cor(y, yhat.val), SEC, SECV, Slope.val, Bias.val, RPD.val)
 
 ### Prediction with test set
 
@@ -83,11 +87,14 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 
     yhat.test <- predict(result, ncomp = ncomp, newdata = as.matrix(x.test))
 
+    result.test.lm <- lm(yhat.test ~ y.test)
+    Slope.test <- result.test.lm$coefficients[2]
+
     Bias.test <- mean(y.test - yhat.test)
     SEP       <- sqrt(sum((y.test - yhat.test-Bias.test)^2)/(length(y.test)-1))
     RPD.test  <- sd(y.test)/SEP
 
-    stats.test <- data.frame(stats, N.test=length(y.test), R.test=cor(y.test, yhat.test), SEP, Bias.test, RPD.test)
+    stats <- data.frame(stats, N.test=length(y.test), R.test=cor(y.test, yhat.test), SEP, Slope.test, Bias.test, RPD.test)
   }
 
 ### Plot graphics
@@ -168,8 +175,6 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
               paste(dir,"loading.csv", sep="/"))
 
     if(!is.null(testdata)){
-      write.csv(stats.test,
-                paste(dir, "stats_test.csv", sep="/"), row.names=FALSE)
       write.csv(data.frame(sample=rownames(x.test), y.test, yhat.test),
                 paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
     }

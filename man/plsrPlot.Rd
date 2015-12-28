@@ -2,7 +2,7 @@
 % Please edit documentation in R/plsrPlot.R
 \name{plsrPlot}
 \alias{plsrPlot}
-\title{Drawing important plots for the partial least squares regression at once}
+\title{Draw important plots for the partial least squares regression at once}
 \usage{
 plsrPlot(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 10,
   output = FALSE, dir = NULL, return.stats = FALSE, ...)

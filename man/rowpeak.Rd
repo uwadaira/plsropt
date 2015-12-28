@@ -2,7 +2,7 @@
 % Please edit documentation in R/rowpeak.R
 \name{rowpeak}
 \alias{rowpeak}
-\title{the number of rows with high and low peak values}
+\title{Number of rows with high and low peak value}
 \usage{
 rowpeak(x)
 }
@@ -13,7 +13,7 @@ rowpeak(x)
 an object of class \code{list} containing the number of rows which have high and low peak values
 }
 \description{
-the number of rows with high and low peak values
+Number of rows with high and low peak value
 }
 \examples{
 rowpeak(x)

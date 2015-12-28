@@ -2,7 +2,7 @@
 % Please edit documentation in R/extdat.R
 \name{extdat}
 \alias{extdat}
-\title{Extracting the specific range of column from a data set.}
+\title{Extract the specific range of column from a data set.}
 \usage{
 extdat(x, start, end)
 }
@@ -17,7 +17,7 @@ extdat(x, start, end)
 a new data set of class \code{data.frame} or \code{matrix}
 }
 \description{
-Extracting the specific range of column from a data set.
+Extract the specific range of column from a data set.
 }
 \examples{
 x <- extdat(data, start = 700, end = 1050)
