@@ -187,11 +187,5 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     dev.off()
   }
 
-  if(is.null(testdata)){
-    if(return.stats == TRUE){return(stats)
-    }else return(result)
-  }else{
-    if(return.stats == TRUE){return(stats.test)
-    }else return(result)
-  }
+ return(stats)
 }
