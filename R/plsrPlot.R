@@ -61,8 +61,10 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
   }
 
   yhat.cal <- result$fitted.values[, , ncomp]
-  yhat.val <- result$validation$pred[, , ncomp]
+  result.cal.lm <- lm(yhat.cal ~ y)
+  Slope.cal <- result.cal.lm$coefficients[2]
 
+  yhat.val <- result$validation$pred[, , ncomp]
   result.val.lm <- lm(yhat.val ~ y)
   Slope.val <- result.val.lm$coefficients[2]
 
@@ -71,7 +73,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
   SECV     <- sqrt(sum((y - yhat.val - Bias.val)^2)/(length(y)-1))
   RPD.val  <- sd(y)/SECV
 
-  stats <- data.frame(N=length(y), ncomp, R.cal=cor(y, yhat.cal), R.val=cor(y, yhat.val), SEC, SECV, Slope.val, Bias.val, RPD.val)
+  stats <- data.frame(N=length(y), ncomp, R.cal=cor(y, yhat.cal), Slope.cal, SEC, R.val=cor(y, yhat.val), Slope.val, SECV, Bias.val, RPD.val)
 
 ### Prediction with test set
 
@@ -94,7 +96,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     SEP       <- sqrt(sum((y.test - yhat.test-Bias.test)^2)/(length(y.test)-1))
     RPD.test  <- sd(y.test)/SEP
 
-    stats <- data.frame(stats, N.test=length(y.test), R.test=cor(y.test, yhat.test), SEP, Slope.test, Bias.test, RPD.test)
+    stats <- data.frame(stats, N.test=length(y.test), R.test=cor(y.test, yhat.test), Slope.test, SEP, Bias.test, RPD.test)
   }
 
 ### Plot graphics
