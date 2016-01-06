@@ -14,5 +14,4 @@ If you don't have `devtools` install yet, you will need to first install it.
 
     install.packages("devtools")
 	
-The package vignette is available in [English](http://rpubs.com/uwadaira/plsropt) and 
-[Japanese](http://rpubs.com/uwadaira/plsropt_jp).
+The package vignette is available in [here](https://sites.google.com/site/yuwadaira/r-package/plsropt).
