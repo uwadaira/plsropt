@@ -2,7 +2,7 @@
 % Please edit documentation in R/matsgolay.R
 \name{matsgolay}
 \alias{matsgolay}
-\title{Savitzky-Golay smoothing, 1st/2nd derivative}
+\title{Apply Savitzky-Golay smoothing or 1st/2nd derivative to the matrix or dataframe}
 \usage{
 matsgolay(x, ...)
 }

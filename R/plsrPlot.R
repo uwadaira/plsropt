@@ -41,7 +41,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
   x <- d[[2]]
   x <- as.matrix(x)
 
-  # Remove the observation with [y = NA]
+  # Remove the observation of [y = NA]
   x <- x[!is.na(y), ]
   y <- y[!is.na(y)]
 

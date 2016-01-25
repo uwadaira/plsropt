@@ -1,4 +1,4 @@
-#' @title Savitzky-Golay smoothing, 1st/2nd derivative
+#' @title Apply Savitzky-Golay smoothing or 1st/2nd derivative to the matrix or dataframe
 #'
 #' @description The function \code{matsgolay} applys Savitzky-Golay smoothing, 1st derivative or 2nd derivative to
 #' an object of class \code{matrix} or \code{data.frame} by using \link{\code{sgolayfilt}} in 'signal' package.
