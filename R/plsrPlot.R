@@ -60,6 +60,8 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     ncomp <- ncompopt(RMSECV)
   }
 
+  result.ncomp <- plsr(y ~ x, ncomp=ncomp, method="oscorespls", ...)
+
   yhat.cal <- result$fitted.values[, , ncomp]
   result.cal.lm <- lm(yhat.cal ~ y)
   Slope.cal <- result.cal.lm$coefficients[2]
@@ -186,6 +188,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
     dev.off()
   }
+  if(stats == TRUE) return(stats)
+  else return(result.ncomp)
 
- return(stats)
 }
