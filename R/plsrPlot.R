@@ -188,7 +188,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
     dev.off()
   }
-  if(stats == TRUE) return(stats)
-  else return(result.ncomp)
-
+  if(stats == TRUE){
+    return(stats)
+  }else return(result.ncomp)
 }
