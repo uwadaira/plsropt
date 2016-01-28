@@ -53,6 +53,7 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 ### Perform PLS regression
 
   result <- plsr(y ~ x, ncomp=maxcomp, method="oscorespls", ...)
+  vip <- VIP(result)
 
   # Number of components to be included in the model
   if(ncomp == "auto"){
@@ -117,7 +118,6 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     dir.create(dir, showWarnings = FALSE, recursive = TRUE)
     pdf(paste(dir, "PLS_plots.pdf", sep="/"), width=9, height=9)
   }
-
   par(mfrow=c(2,2))
 
   # Cross-validation plot
@@ -142,7 +142,6 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
   }
 
   # Regression coefficient & VIP plot
-  vip <- VIP(result)
   plot(xvar, result$coefficients[, , ncomp], type="l", col="blue", xlab="variable", ylab="", main=paste("Variable importance (", ncomp, " comps)", sep=""))
   abline(h=0, lty=2, col="blue")
   par(new=T)

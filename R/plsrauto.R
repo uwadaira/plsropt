@@ -7,6 +7,7 @@
 #' @param xrange an object of class \code{list} which contains ranges of X-variables (see below).
 #' @param p filter order for Savitzky-Golay smoothing (default value is 2).
 #' @param n filter length (window size) for Savitzky-Golay smoothing (must be odd. default value is 11).
+#' @param output if \code{TRUE}, the results are output as PDF and CSV files in the `PLSR_auto' directory.
 #' @param ... additional arguments passed to \code{\link{plsrPlot}} and \code{\link{plsr}} in 'pls' package.
 #'
 #' @details Three steps of preprocessing are automatically applied to the X-variable data set.
@@ -47,10 +48,12 @@
 #'
 #' @export
 
-plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, ...){
+plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, output=FALSE, ...){
 
+  if(output == TRUE){
   dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
   dir.create(dir1, showWarnings = FALSE, recursive = TRUE)
+  }
 
   dTrain <- model.frame(formula, data = data)
   yTrain <- dTrain[[1]]
@@ -127,8 +130,11 @@ plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, ...){
             datTest  <- data.frame(y = yTest,  x = I(as.matrix(xTest)))
           }
 
-          dir <- paste(dir1, rname, prename3, sep="/")
-          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, return.stats=TRUE, dir = dir, ...)
+          if(output == TRUE){
+            dir <- paste(dir1, rname, prename3, sep="/")
+          }else dir <- NULL
+
+          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, return.stats=TRUE, dir = dir, output = output, ...)
           result.all <- rbind.data.frame(result.all, data.frame(Xrange=rname, Preprocessing=prename3, result))
         }
       }
@@ -145,7 +151,11 @@ plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, ...){
   }
   result.all <- result.all[sort.list(sortlist, decreasing = TRUE), ]
   rownames(result.all) <- seq(1, nrow(result.all), by = 1)
-  write.csv(result.all, paste(dir1, fname, sep = "/"))
+
+  if(output == TRUE){
+    dir.create(dir1, showWarnings = F, recursive = T)
+    write.csv(result.all, paste(dir1, fname, sep = "/"))
+  }
 
   return(result.all)
 }

@@ -5,7 +5,7 @@
 \title{PLS regressions under different combinations of X-variable range and preprocessing method}
 \usage{
 plsrauto(formula, data, testdata = NULL, xrange = NULL, p = 2, n = 11,
-  ...)
+  output = FALSE, ...)
 }
 \arguments{
 \item{formula}{a model formula like \code{y ~ x}. See \code{\link{plsr}} and \code{\link{lm}} for a detailed description.}
@@ -17,6 +17,8 @@ plsrauto(formula, data, testdata = NULL, xrange = NULL, p = 2, n = 11,
 \item{p}{filter order for Savitzky-Golay smoothing (default value is 2).}
 
 \item{n}{filter length (window size) for Savitzky-Golay smoothing (must be odd. default value is 11).}
+
+\item{output}{if \code{TRUE}, the results are output as PDF and CSV files in the `PLSR_auto' directory.}
 
 \item{...}{additional arguments passed to \code{\link{plsrPlot}} and \code{\link{plsr}} in 'pls' package.}
 }
