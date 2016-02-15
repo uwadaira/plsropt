@@ -33,13 +33,23 @@
 #'
 #' @export
 
-plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 10,
+plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
+                     yTrain = NULL, xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
+                     ncomp = "auto", maxcomp = 10,
                      output = FALSE, dir = NULL, return.stats = FALSE, ...){
 
-  d <- model.frame(formula, data = data)
-  y <- d[[1]]
-  x <- d[[2]]
-  x <- as.matrix(x)
+  if(!is.null(formula)){
+    if(is.null(data)) stop("data is not specified")
+    d <- model.frame(formula, data = data)
+    y <- d[[1]]
+    x <- d[[2]]
+    x <- as.matrix(x)
+  }else{
+    if(is.null(yTrain)) stop("yTrain is not specified")
+    y <- yTrain
+    if(is.null(xTrain)) stop("xTrain is not specified")
+    x <- as.matrix(xTrain)
+  }
 
   # Remove the observation of [y = NA]
   x <- x[!is.na(y), ]
@@ -80,11 +90,18 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 
 ### Prediction with test set
 
-  if(!is.null(testdata)){
-    d.test <- model.frame(formula, data = testdata)
-    y.test <- d.test[[1]]
-    x.test <- d.test[[2]]
-    x.test <- as.matrix(x.test)
+  if(!is.null(testdata) || !is.null(xTest)){
+
+    if(!is.null(testdata)){
+      d.test <- model.frame(formula, data = testdata)
+      y.test <- d.test[[1]]
+      x.test <- d.test[[2]]
+      x.test <- as.matrix(x.test)
+    }else{
+      if(is.null(yTest)) stop("yTest is not specified")
+      y.test <- yTest
+      x.test <- as.matrix(xTest)
+    }
 
     # Remove the observation with [y.test = NA]
     x.test <- x.test[!is.na(y.test), ]
@@ -106,7 +123,12 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
 
   if(output == TRUE){
     if(is.null(dir)){
-      yname <- terms(formula)[[2]]
+      if(!is.null(formula)){
+        yname <- terms(formula)[[2]]
+      }else{
+        if(is.null(yname)) stop("yname must be specified")
+        yname <- yname
+      }
       dir <- paste("./PLSR_result", yname, sep = "/")
     }
     if(is.null(testdata)){
@@ -187,7 +209,6 @@ plsrPlot <- function(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 1
     baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
     dev.off()
   }
-  if(return.stats == TRUE){
-    return(stats)
+  if(return.stats == TRUE){return(stats)
   }else return(result.ncomp)
 }

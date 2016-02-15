@@ -48,29 +48,47 @@
 #'
 #' @export
 
-plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, output=FALSE, ...){
+plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
+                     yTrain = NULL, xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
+                     xrange = NULL, p = 2, n = 11, output = FALSE, ...){
+
+  if(!is.null(formula)){
+    if(is.null(data)) stop("data is not specified")
+    dTrain <- model.frame(formula, data = data)
+    yTrain <- dTrain[[1]]
+    xTrain <- dTrain[[2]]
+  }else{
+    if(is.null(yTrain)) stop("yTrain is not specified")
+    yTrain <- yTrain
+    if(is.null(xTrain)) stop("xTrain is not specified")
+    xTrain <- as.matrix(xTrain)
+  }
 
   if(output == TRUE){
-  dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
-  dir.create(dir1, showWarnings = FALSE, recursive = TRUE)
+    if(!is.null(formula)){
+      dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
+    }else{
+      if(is.null(yname)) stop("yname must be specified")
+      dir1 <- paste("./PLSR_auto", yname, sep = "/")
+    }
+    dir.create(dir1, showWarnings = FALSE, recursive = TRUE)
   }
 
-  dTrain <- model.frame(formula, data = data)
-  yTrain <- dTrain[[1]]
-  xTrain <- dTrain[[2]]
-
-  if(!is.null(testdata)){
-    dTest <- model.frame(formula, data = testdata)
-    yTest <- dTest[[1]]
-    xTest <- dTest[[2]]
-  }
-
-  if(is.null(testdata)){
-    xAll <- xTrain
-  }else{
+  if(!is.null(testdata) || !is.null(xTest)){
+    if(!is.null(testdata)){
+      dTest <- model.frame(formula, data = testdata)
+      yTest <- dTest[[1]]
+      xTest <- dTest[[2]]
+    }else if(!is.null(xTest)){
+      if(is.null(yTest)) stop("yTest is not specified")
+      yTest <- yTest
+      xTest <- as.matrix(xTest)
+    }
     set <- c(rep("train", nrow(xTrain)), rep("test", nrow(xTest)))
     xAll <- rbind(xTrain, xTest)
     colnames(xAll) <- colnames(xTrain)
+  }else{
+    xAll <- xTrain
   }
 
   ### Run PLS regressions automatically
@@ -119,15 +137,15 @@ plsrauto <- function(formula, data, testdata=NULL, xrange=NULL, p=2, n=11, outpu
             prename3 <- prename2
           }
 
-          if(is.null(testdata)){
-            xTrain   <- xUse
-            datTrain <- data.frame(y = yTrain, x = I(as.matrix(xTrain)))
-            datTest  <- NULL
-          }else{
+          if(!is.null(testdata) || !is.null(xTest)){
             xTrain  <- subset(xUse, set == "train")
             xTest   <- subset(xUse, set == "test")
             datTrain <- data.frame(y = yTrain, x = I(as.matrix(xTrain)))
             datTest  <- data.frame(y = yTest,  x = I(as.matrix(xTest)))
+          }else{
+            xTrain   <- xUse
+            datTrain <- data.frame(y = yTrain, x = I(as.matrix(xTrain)))
+            datTest  <- NULL
           }
 
           if(output == TRUE){

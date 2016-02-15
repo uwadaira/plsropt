@@ -4,8 +4,9 @@
 \alias{plsrauto}
 \title{PLS regressions under different combinations of X-variable range and preprocessing method}
 \usage{
-plsrauto(formula, data, testdata = NULL, xrange = NULL, p = 2, n = 11,
-  output = FALSE, ...)
+plsrauto(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
+  xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
+  xrange = NULL, p = 2, n = 11, output = FALSE, ...)
 }
 \arguments{
 \item{formula}{a model formula like \code{y ~ x}. See \code{\link{plsr}} and \code{\link{lm}} for a detailed description.}

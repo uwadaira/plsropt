@@ -4,8 +4,10 @@
 \alias{plsrPlot}
 \title{Draw important plots for the partial least squares regression at once}
 \usage{
-plsrPlot(formula, data, testdata = NULL, ncomp = "auto", maxcomp = 10,
-  output = FALSE, dir = NULL, return.stats = FALSE, ...)
+plsrPlot(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
+  xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
+  ncomp = "auto", maxcomp = 10, output = FALSE, dir = NULL,
+  return.stats = FALSE, ...)
 }
 \arguments{
 \item{formula}{a model formula (see below).}
