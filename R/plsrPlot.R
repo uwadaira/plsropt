@@ -182,6 +182,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
   legend(par()$usr[2], par()$usr[4], legend=label, col=colsld, lty=1, ncol=1)
   par(mar=c(5,4,4,2) + 0.1)
   par(xpd=F)
+  par(mfrow=c(1,1)) # reset panel number
 
   if(output == TRUE) dev.off()
 
