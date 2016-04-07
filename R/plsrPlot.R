@@ -67,8 +67,8 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
   # Number of components to be included in the model
   if(ncomp == "auto"){
-    RMSECV <- sqrt(result$validation$PRESS/(length(y)-1))
-    ncomp <- ncompopt(RMSECV)
+    RMSECV <- sqrt(c(result$validation$PRESS0, result$validation$PRESS)/(length(y)-1))
+    ncomp <- ncompopt(RMSECV) - 1
   }
 
   result.ncomp <- plsr(y ~ x, ncomp=ncomp, method="oscorespls", ...)
