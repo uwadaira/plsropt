@@ -3,7 +3,7 @@ Type: Package
 Title: Automatically perform partial least squares (PLS) regressions under
     different combinations of X-variable range and preprocessing method.
 Version: 1.1
-Date: 2016-02-15
+Date: 2016-05-09
 Author: Yasuhiro Uwadaira
 Maintainer: Yasuhiro Uwadaira <uwa7878@gmail.com>
 Description: Perform PLS regressions under different combinations of X-variable
