@@ -126,95 +126,100 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
 ### Plot graphics
 
-  if(output == TRUE){
-    if(is.null(dir)){
-      if(!is.null(formula)){
-        yname <- terms(formula)[[2]]
-      }else{
-        if(is.null(yname)) stop("yname must be specified")
-        yname <- yname
+  if(output == FALSE && return.stats == TRUE){
+    return(stats)
+  }else{
+    if(output == TRUE){
+      if(is.null(dir)){
+        if(!is.null(formula)){
+          yname <- terms(formula)[[2]]
+        }else{
+          if(is.null(yname)) stop("yname must be specified")
+          yname <- yname
+        }
+        dir <- paste("./PLSR_result", yname, sep = "/")
       }
-      dir <- paste("./PLSR_result", yname, sep = "/")
-    }
-    if(is.null(testdata)){
-      subdir <- paste(ncomp, "comps(n=", nrow(x), ")_train", sep = "")
-    }else{
-      subdir <- paste(ncomp, "comps(n=", nrow(x), ")_test", sep = "")
-    }
-    dir <- paste(dir, subdir, sep = "/")
-    dir.create(dir, showWarnings = FALSE, recursive = TRUE)
-    pdf(paste(dir, "PLS_plots.pdf", sep="/"), width=9, height=9)
-  }
-  par(mfrow=c(2,2))
-
-  # Cross-validation plot
-  plot(result, "validation", main="Cross-validation", legendpos = "topright")
-
-  # Plot predicted values vs. actual values
-  if(is.null(testdata)){  # Training set
-    xylim <- c(min(y, yhat.cal, yhat.val), max(y, yhat.cal, yhat.val))
-    plot(y, yhat.cal, type="p", pch=16, col="blue", asp=1, xlim=xylim, ylim=xylim, xlab="actual", ylab="predicted", main=paste("Actual vs. Predicted (", ncomp, " comps, Training set)", sep=""))
-    abline(a=0,b=1)
-    par(new = TRUE)
-    plot(y, yhat.val, type="p", pch=16, col="red", asp=1, xlim=xylim, ylim=xylim, axes=F, xlab="", ylab="", main="")
-    legend("topleft", legend=c("Calibration", "Validation"), pch=16, col=c("blue", "red"), bg="white")
-  }else{  # Test set
-    xylim <- c(min(y, yhat.cal, y.test, yhat.test), max(y, yhat.cal, y.test, yhat.test))
-    plot(y, yhat.cal, pch=16, col="blue", asp=1, xlim=xylim, ylim=xylim, xlab="actual value", ylab="predicted value", main=paste("Actual vs. Predicted (", ncomp, " comps, Test set)", sep=""))
-    abline(a=0,b=1)
-    par(new = TRUE)
-    plot(y.test, yhat.test, pch=16, col="red", asp=1, xlim=xylim, ylim=xylim, axes=F, main="", xlab="", ylab="")
-    legend("topleft", legend=c("Calibration", "Prediction"), pch=16, col=c("blue", "red"), bg="white")
-    box()
-  }
-
-  # Regression coefficient & VIP plot
-  plot(xvar, result$coefficients[, , ncomp], type="l", col="blue", xlab="variable", ylab="", main=paste("Variable importance (", ncomp, " comps)", sep=""))
-  abline(h=0, lty=2, col="blue")
-  par(new=T)
-  plot(xvar, vip[, ncomp], type="l", col="red", axes=FALSE, xlab="", ylab="", main="")
-  axis(4)
-  abline(h=1, lty=2, col="red")
-  legend("topleft", legend=c("Regression coefficient", "VIP (right axis)"), lty=1, col=c("blue", "red"), bty="n")
-
-  # Loading plot
-  colsld <- seq(1, ncomp, by=1)
-  par(mar=c(5,4,4,5) + 0.1)
-  matplot(xvar, loading.weights(result)[,1:ncomp], type="l", lty=1, col=colsld, xlab="variable", ylab="", main="Loading")
-  abline(h=0, lty=2)
-  par(xpd=T)
-  label <- seq(1, ncomp, by=1)
-  legend(par()$usr[2], par()$usr[4], legend=label, col=colsld, lty=1, ncol=1)
-  par(mar=c(5,4,4,2) + 0.1)
-  par(xpd=F)
-  par(mfrow=c(1,1)) # reset panel number
-
-  if(output == TRUE) dev.off()
-
-### Save the result
-
-  if(output == TRUE){
-    write.csv(stats,
-              paste(dir, "stats.csv", sep="/"), row.names=FALSE)
-    write.csv(data.frame(sample=rownames(x), y, yhat.cal, yhat.val),
-              paste(dir, "fittedvalue.csv", sep="/"), row.names=FALSE)
-    write.csv(coef(result, ncomp=ncomp, intercept=TRUE),
-              paste(dir, "regcoef.csv", sep="/"))
-    write.csv(vip,
-              paste(dir, "vip.csv", sep="/"))
-    write.csv(loading.weights(result)[,1:ncomp],
-              paste(dir,"loading.csv", sep="/"))
-
-    if(!is.null(testdata)){
-      write.csv(data.frame(sample=rownames(x.test), y.test, yhat.test),
-                paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
+      if(is.null(testdata)){
+        subdir <- paste(ncomp, "comps(n=", nrow(x), ")_train", sep = "")
+      }else{
+        subdir <- paste(ncomp, "comps(n=", nrow(x), ")_test", sep = "")
+      }
+      dir <- paste(dir, subdir, sep = "/")
+      dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+      pdf(paste(dir, "PLS_plots.pdf", sep="/"), width=9, height=9)
     }
 
-    # Save Bland-Altman plot for outlier detection
-    pdf(paste(dir, "BA_plot.pdf", sep="/"), width=6, height=5)
-    baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
-    dev.off()
+    par(mfrow=c(2,2))
+
+    # Cross-validation plot
+    plot(result, "validation", main="Cross-validation", legendpos = "topright")
+
+    # Plot predicted values vs. actual values
+    if(is.null(testdata)){  # Training set
+      xylim <- c(min(y, yhat.cal, yhat.val), max(y, yhat.cal, yhat.val))
+      plot(y, yhat.cal, type="p", pch=16, col="blue", asp=1, xlim=xylim, ylim=xylim, xlab="actual", ylab="predicted", main=paste("Actual vs. Predicted (", ncomp, " comps, Training set)", sep=""))
+      abline(a=0,b=1)
+      par(new = TRUE)
+      plot(y, yhat.val, type="p", pch=16, col="red", asp=1, xlim=xylim, ylim=xylim, axes=F, xlab="", ylab="", main="")
+      legend("topleft", legend=c("Calibration", "Validation"), pch=16, col=c("blue", "red"), bg="white")
+    }else{  # Test set
+      xylim <- c(min(y, yhat.cal, y.test, yhat.test), max(y, yhat.cal, y.test, yhat.test))
+      plot(y, yhat.cal, pch=16, col="blue", asp=1, xlim=xylim, ylim=xylim, xlab="actual value", ylab="predicted value", main=paste("Actual vs. Predicted (", ncomp, " comps, Test set)", sep=""))
+      abline(a=0,b=1)
+      par(new = TRUE)
+      plot(y.test, yhat.test, pch=16, col="red", asp=1, xlim=xylim, ylim=xylim, axes=F, main="", xlab="", ylab="")
+      legend("topleft", legend=c("Calibration", "Prediction"), pch=16, col=c("blue", "red"), bg="white")
+      box()
+    }
+
+    # Regression coefficient & VIP plot
+    plot(xvar, result$coefficients[, , ncomp], type="l", col="blue", xlab="variable", ylab="", main=paste("Variable importance (", ncomp, " comps)", sep=""))
+    abline(h=0, lty=2, col="blue")
+    par(new=T)
+    plot(xvar, vip[, ncomp], type="l", col="red", axes=FALSE, xlab="", ylab="", main="")
+    axis(4)
+    abline(h=1, lty=2, col="red")
+    legend("topleft", legend=c("Regression coefficient", "VIP (right axis)"), lty=1, col=c("blue", "red"), bty="n")
+
+    # Loading plot
+    colsld <- seq(1, ncomp, by=1)
+    par(mar=c(5,4,4,5) + 0.1)
+    matplot(xvar, loading.weights(result)[,1:ncomp], type="l", lty=1, col=colsld, xlab="variable", ylab="", main="Loading")
+    abline(h=0, lty=2)
+    par(xpd=T)
+    label <- seq(1, ncomp, by=1)
+    legend(par()$usr[2], par()$usr[4], legend=label, col=colsld, lty=1, ncol=1)
+    par(mar=c(5,4,4,2) + 0.1)
+    par(xpd=F)
+    par(mfrow=c(1,1)) # reset panel number
+
+    if(output == TRUE) dev.off()
+
+    ### Save the result
+    if(output == TRUE){
+      write.csv(stats,
+                paste(dir, "stats.csv", sep="/"), row.names=FALSE)
+      write.csv(data.frame(sample=rownames(x), y, yhat.cal, yhat.val),
+                paste(dir, "fittedvalue.csv", sep="/"), row.names=FALSE)
+      write.csv(coef(result, ncomp=ncomp, intercept=TRUE),
+                paste(dir, "regcoef.csv", sep="/"))
+      write.csv(vip,
+                paste(dir, "vip.csv", sep="/"))
+      write.csv(loading.weights(result)[,1:ncomp],
+                paste(dir,"loading.csv", sep="/"))
+
+      if(!is.null(testdata)){
+        write.csv(data.frame(sample=rownames(x.test), y.test, yhat.test),
+                  paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
+      }
+
+      # Save Bland-Altman plot for outlier detection
+      pdf(paste(dir, "BA_plot.pdf", sep="/"), width=6, height=5)
+      baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
+      dev.off()
+    }
+
+    if(return.stats == TRUE){return(stats)
+    }else return(result.ncomp)
   }
-  if(return.stats == TRUE){return(stats)
-  }else return(result.ncomp)
 }

@@ -17,4 +17,7 @@ yarn.pls <- plsr(density ~ NIR, 6, data = yarn, validation = "CV")
 VIP(yarn.pls)
 
 }
+\author{
+Bjørn-Helge Mevik (bhx6@mevik.net)
+}
 
