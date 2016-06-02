@@ -199,7 +199,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     if(output == TRUE){
       write.csv(stats,
                 paste(dir, "stats.csv", sep="/"), row.names=FALSE)
-      write.csv(data.frame(sample=rownames(y), y, yhat.cal, yhat.val),
+      write.csv(data.frame(y, yhat.cal, yhat.val),
                 paste(dir, "fittedvalue.csv", sep="/"), row.names=FALSE)
       write.csv(coef(result, ncomp=ncomp, intercept=TRUE),
                 paste(dir, "regcoef.csv", sep="/"))
@@ -209,7 +209,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
                 paste(dir,"loading.csv", sep="/"))
 
       if(!is.null(testdata)){
-        write.csv(data.frame(sample=rownames(y.test), y.test, yhat.test),
+        write.csv(data.frame(y.test, yhat.test),
                   paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
       }
 
