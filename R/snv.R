@@ -1,20 +1,25 @@
 #' @title Standard normal variate (SNV)
 #'
-#' @description The function \code{snv} applys the standard normal variate to the data.
+#' @description The function \code{snv} applys the standard normal variate to the spectral data.
 #'
-#' @param x x m-by-n data of class \code{data.frame} or \code{matrix} to be filtered. m is the number of samples (observations) and n is the number of variables.
-#'
-#' @return data applied the standard normal variate
+#' @param x \code{data.frame} or \code{matrix} with spectra in columns.
+#' @param range range of spectra used for calculating mean value and sd value. Specify as the column numbers.
+#' @return spectral data applied the standard normal variate
 #'
 #' @examples
 #' dat.snv <- snv(dat)
 #'
 #' @export
 
-snv <- function(x){
+snv <- function(x, range = c(1, ncol(x))){
 
-  x.snv <-t(apply(x, 1, function(x) (x - mean(x))/sd(x)))
-  colnames(x.snv) <- colnames(x)
+  x.snv.all <- c()
+  for(i in 1:nrow(x)){
+    x.use <- as.numeric(x[i, c(range[1]:range[2])])
+    x.snv <- (x[i,] - mean(x.use))/sd(x.use)
+    x.snv.all <- rbind(x.snv.all, x.snv)
+  }
+  colnames(x.snv.all) <- colnames(x)
 
-  return(x.snv)
+  return(x.snv.all)
 }

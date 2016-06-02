@@ -4,16 +4,18 @@
 \alias{snv}
 \title{Standard normal variate (SNV)}
 \usage{
-snv(x)
+snv(x, range = c(1, ncol(x)))
 }
 \arguments{
-\item{x}{x m-by-n data of class \code{data.frame} or \code{matrix} to be filtered. m is the number of samples (observations) and n is the number of variables.}
+\item{x}{\code{data.frame} or \code{matrix} with spectra in columns.}
+
+\item{range}{range of spectra used for calculating mean value and sd value. Specify as the column numbers.}
 }
 \value{
-data applied the standard normal variate
+spectral data applied the standard normal variate
 }
 \description{
-The function \code{snv} applys the standard normal variate to the data.
+The function \code{snv} applys the standard normal variate to the spectral data.
 }
 \examples{
 dat.snv <- snv(dat)
