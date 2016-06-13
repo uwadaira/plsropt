@@ -24,12 +24,11 @@ ncompopt <- function(x){
     }else if(length(row.peak$low) == 1){
       ncomp.opt  <- row.peak$low[1]
     }else{
+      ncomp.opt <- row.peak$low[1]
       for(i in 1:(length(row.peak$low) - 1)){
-        diff.x <- x[row.peak$low[i]] - x[row.peak$low[i+1]]
+        diff.x <- x[ncomp.opt] - x[row.peak$low[i+1]]
         if(diff.x > 0 && diff.x >= x[row.peak$low[i]]*0.02){
           ncomp.opt <- row.peak$low[i+1]
-        }else{
-          ncomp.opt <- row.peak$low[i]
         }
       }
     }
