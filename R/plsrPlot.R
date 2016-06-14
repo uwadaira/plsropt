@@ -127,9 +127,6 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
 ### Plot graphics
 
-#   if(output == FALSE && return.stats == TRUE){
-#     return(stats)
-#   }else{
   if(plot == TRUE){
     if(output == TRUE){
       if(is.null(dir)){
