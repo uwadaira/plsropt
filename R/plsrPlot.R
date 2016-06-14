@@ -8,6 +8,7 @@
 #' @param testdata data set for prediction.
 #' @param ncomp the number of components (latent variables) to include in the model (see below).
 #' @param maxcomp Maximum number of components (latent variables) to be used for cross-validation.
+#' @param plot if \code{TRUE}, the four plots are drawn.
 #' @param output if \code{TRUE}, the results are output as PDF and CSV files.
 #' @param dir path to the directory where the results are output (default value is \code{"PLSR_result"}).
 #' @param return.stats if \code{TRUE}, an object of class \code{data.frame} containing the statistics of PLS regression is returned.
@@ -35,7 +36,7 @@
 
 plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
                      yTrain = NULL, xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
-                     ncomp = "auto", maxcomp = 10,
+                     ncomp = "auto", maxcomp = 10, plot = TRUE,
                      output = FALSE, dir = NULL, return.stats = FALSE, ...){
 
   if(!is.null(formula)){
@@ -126,9 +127,10 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
 ### Plot graphics
 
-  if(output == FALSE && return.stats == TRUE){
-    return(stats)
-  }else{
+#   if(output == FALSE && return.stats == TRUE){
+#     return(stats)
+#   }else{
+  if(plot == TRUE){
     if(output == TRUE){
       if(is.null(dir)){
         if(!is.null(formula)){
@@ -194,32 +196,32 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     par(mfrow=c(1,1)) # reset panel number
 
     if(output == TRUE) dev.off()
+  }
 
-    ### Save the result
-    if(output == TRUE){
-      write.csv(stats,
-                paste(dir, "stats.csv", sep="/"), row.names=FALSE)
-      write.csv(data.frame(y, yhat.cal, yhat.val),
-                paste(dir, "fittedvalue.csv", sep="/"), row.names=FALSE)
-      write.csv(coef(result, ncomp=ncomp, intercept=TRUE),
-                paste(dir, "regcoef.csv", sep="/"))
-      write.csv(vip,
-                paste(dir, "vip.csv", sep="/"))
-      write.csv(loading.weights(result)[,1:ncomp],
-                paste(dir,"loading.csv", sep="/"))
+  ### Save the result
+  if(output == TRUE){
+    write.csv(stats,
+              paste(dir, "stats.csv", sep="/"), row.names=FALSE)
+    write.csv(data.frame(y, yhat.cal, yhat.val),
+              paste(dir, "fittedvalue.csv", sep="/"), row.names=FALSE)
+    write.csv(coef(result, ncomp=ncomp, intercept=TRUE),
+              paste(dir, "regcoef.csv", sep="/"))
+    write.csv(vip,
+              paste(dir, "vip.csv", sep="/"))
+    write.csv(loading.weights(result)[,1:ncomp],
+              paste(dir,"loading.csv", sep="/"))
 
-      if(!is.null(testdata)){
-        write.csv(data.frame(y.test, yhat.test),
-                  paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
-      }
-
-      # Save Bland-Altman plot for outlier detection
-      pdf(paste(dir, "BA_plot.pdf", sep="/"), width=6, height=5)
-      baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
-      dev.off()
+    if(!is.null(testdata)){
+      write.csv(data.frame(y.test, yhat.test),
+                paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
     }
 
-    if(return.stats == TRUE){return(stats)
-    }else return(result.ncomp)
+    # Save Bland-Altman plot for outlier detection
+    pdf(paste(dir, "BA_plot.pdf", sep="/"), width=6, height=5)
+    baplot(y, yhat.val, sample=seq(1,length(y),by=1), nsd=3)
+    dev.off()
   }
+
+  if(return.stats == TRUE){return(stats)
+  }else return(result.ncomp)
 }

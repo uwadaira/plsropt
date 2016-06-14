@@ -6,8 +6,8 @@
 \usage{
 plsrPlot(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
   xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
-  ncomp = "auto", maxcomp = 10, output = FALSE, dir = NULL,
-  return.stats = FALSE, ...)
+  ncomp = "auto", maxcomp = 10, plot = TRUE, output = FALSE,
+  dir = NULL, return.stats = FALSE, ...)
 }
 \arguments{
 \item{formula}{a model formula (see below).}
@@ -19,6 +19,8 @@ plsrPlot(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
 \item{ncomp}{the number of components (latent variables) to include in the model (see below).}
 
 \item{maxcomp}{Maximum number of components (latent variables) to be used for cross-validation.}
+
+\item{plot}{if \code{TRUE}, the four plots are drawn.}
 
 \item{output}{if \code{TRUE}, the results are output as PDF and CSV files.}
 

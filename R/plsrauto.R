@@ -152,7 +152,7 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
             dir <- paste(dir1, rname, prename3, sep="/")
           }else dir <- NULL
 
-          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, return.stats=TRUE, dir = dir, output = output, ...)
+          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, plot = FALSE, return.stats=TRUE, dir = dir, output = output, ...)
           result.all <- rbind.data.frame(result.all, data.frame(Xrange=rname, Preprocessing=prename3, result))
         }
       }
