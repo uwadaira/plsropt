@@ -6,8 +6,9 @@
 \usage{
 plsrPlot(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
   xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
-  ncomp = "auto", maxcomp = 10, plot = TRUE, output = FALSE,
-  dir = NULL, return.stats = FALSE, ...)
+  ncomp = "auto", maxcomp = 10, plot = TRUE, validation = "CV",
+  segment.type = "interleaved", output = FALSE, dir = NULL,
+  return.stats = FALSE, ...)
 }
 \arguments{
 \item{formula}{a model formula (see below).}

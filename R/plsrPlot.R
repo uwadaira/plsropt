@@ -36,7 +36,7 @@
 
 plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
                      yTrain = NULL, xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
-                     ncomp = "auto", maxcomp = 10, plot = TRUE,
+                     ncomp = "auto", maxcomp = 10, plot = TRUE, validation = "CV", segment.type ="interleaved",
                      output = FALSE, dir = NULL, return.stats = FALSE, ...){
 
   if(!is.null(formula)){
