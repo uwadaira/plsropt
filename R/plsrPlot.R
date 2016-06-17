@@ -36,7 +36,7 @@
 
 plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
                      yTrain = NULL, xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
-                     ncomp = "auto", maxcomp = 10, plot = TRUE, validation = "CV", segment.type ="interleaved",
+                     ncomp = "auto", maxcomp = 10, plot = TRUE, validation = "CV", segment.type = "interleaved",
                      output = FALSE, dir = NULL, return.stats = FALSE, ...){
 
   if(!is.null(formula)){
@@ -57,13 +57,14 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
   y <- y[!is.na(y)]
 
   xvar <- as.numeric(colnames(x))
+  if(is.na(range(xvar)[1])) xvar <- 1:ncol(x)
 
   # Maximum number of components
   if(maxcomp > length(y) - 2){maxcomp <- length(y) - 2}
 
 ### Perform PLS regression
 
-  result <- plsr(y ~ x, ncomp=maxcomp, method="oscorespls", ...)
+  result <- plsr(y ~ x, ncomp=maxcomp, method="oscorespls", validation = validation, segment.type = segment.type, ...)
   vip <- VIP(result)
 
   # Number of components to be included in the model
@@ -77,7 +78,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     }
   }
 
-  result.ncomp <- plsr(y ~ x, ncomp=ncomp, method="oscorespls", ...)
+  result.ncomp <- plsr(y ~ x, ncomp=ncomp, method="oscorespls", validation = validation, segment.type = segment.type, ...)
 
   yhat.cal <- result$fitted.values[, , ncomp]
   result.cal.lm <- lm(yhat.cal ~ y)
