@@ -150,9 +150,10 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
 
           if(output == TRUE){
             dir <- paste(dir1, rname, prename3, sep="/")
+            plot <- TRUE
           }else dir <- NULL
 
-          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, plot = FALSE, return.stats=TRUE, dir = dir, output = output, ...)
+          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, plot = plot, return.stats=TRUE, dir = dir, output = output, ...)
           result.all <- rbind.data.frame(result.all, data.frame(Xrange=rname, Preprocessing=prename3, result))
         }
       }

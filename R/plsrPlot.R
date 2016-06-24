@@ -135,7 +135,6 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
           yname <- terms(formula)[[2]]
         }else{
           if(is.null(yname)) stop("yname must be specified")
-          yname <- yname
         }
         dir <- paste("./PLSR_result", yname, sep = "/")
       }

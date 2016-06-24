@@ -20,6 +20,7 @@ snv <- function(x, range = c(1, ncol(x))){
     x.snv.all <- rbind(x.snv.all, x.snv)
   }
   colnames(x.snv.all) <- colnames(x)
+  rownames(x.snv.all) <- rownames(x)
 
   return(x.snv.all)
 }
