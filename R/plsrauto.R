@@ -14,43 +14,27 @@
 #' First, standard normal variate (SNV) is applied or not.
 #' Second, Savitzky-Golay smoothing, 1st derivative or 2nd derivative is applied or not, respectively.
 #' Finally, auto-scaling is applied or not.
-#' Total 16 (2*4*2) kinds of preprocessing methods are applied and the results of PLS regressions are returned as an object of class \code{data.frame} and output as a CSV file.
-#' If \code{output == TRUE}, PLS regression result per combination of a X-variable range and a preprocessing method is output as PDF and CSV files in one directory.
+#' Total 16 (2*4*2) kinds of preprocessing methods are applied and the results of PLS regressions are returned as an object of class \code{data.frame}.
+#' If \code{output == TRUE}, each PLS regression result is output as PDF and CSV files in one directory.
 #'
 #' @return an object of class \code{data.frame} containing the statistics of PLS regressions under the different combinations of X-variable range and preprocessing method is returned.
 #'
 #' @seealso \code{\link{plsrPlot}}, \code{\link{plsr}}, \code{\link{lm}}
 #'
 #' @examples
-#' # import CSV file
-#' datAll <- read.csv(file = "./peachNIR.csv", row.names = 1, check.names = F)
+#' data(peach)
+#' datTrain <- peach[1:50, ]
+#' datTest  <- peach[51:74, ]
+#' result.all <- plsrauto(Brix ~ NIR, data = datTrain, testdata = datTest, xrange = list(c(700, 1098), c(1100, 2498)))
 #'
-#' datAll[1:5, 1:7]
-#' Brix firmness       700       702       704       706       708
-#' ak01 12.4     1.37 0.1264722 0.1206582 0.1162688 0.1129761 0.1105212
-#' ak02 13.1     0.83 0.0894380 0.0878140 0.0866534 0.0858628 0.0853562
-#' ak03 12.7     1.28 0.0887944 0.0860848 0.0840838 0.0826256 0.0815916
-#' ak04 10.2     1.50 0.1637433 0.1554227 0.1490126 0.1440929 0.1403139
-#' ak05 11.4     1.00 0.0983719 0.0939621 0.0906616 0.0882200 0.0864351
-#'
-#' # extract X-variables
-#' x <- extdat(datAll, start = 700, end = 2498)
-#'
-#' # merge Y-variables and X-variables
-#' dat <- data.frame(datAll[, 1:2], NIR = I(x))
-#'
-#' # divide the data set into training and test data set
-#' datTrain <- dat[1:50, ]
-#' datTest  <- dat[51:74, ]
-#'
-#' result.all <- plsrauto(Brix ~ NIR, data = datTrain, testdata = datTest,
-#'                        xrange = list(c(700, 1098), c(1100, 2498)))
-#'
+#' @name plsrauto
+#' @docType package
+#' @import signal
 #' @export
 
 plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
                      yTrain = NULL, xTrain = NULL, xTest = NULL, yTest = NULL, yname = NULL,
-                     xrange = NULL, p = 2, n = 11, output = FALSE, ...){
+                     xrange = NULL, p = 2, n = 11, maxcomp = 10, plot = FALSE, output = FALSE, ...){
 
   if(!is.null(formula)){
     if(is.null(data)) stop("data is not specified")
@@ -153,7 +137,7 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
             plot <- TRUE
           }else dir <- NULL
 
-          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, plot = plot, return.stats=TRUE, dir = dir, output = output, ...)
+          result <- plsrPlot(y ~ x, data = datTrain, testdata = datTest, maxcomp = maxcomp, plot = plot, return.stats=TRUE, dir = dir, output = output, ...)
           result.all <- rbind.data.frame(result.all, data.frame(Xrange=rname, Preprocessing=prename3, result))
         }
       }

@@ -3,12 +3,15 @@
 #' @description The function \code{snv} applys the standard normal variate to the spectral data.
 #'
 #' @param x \code{data.frame} or \code{matrix} with spectra in columns.
-#' @param range range of spectra used for calculating mean value and sd value. Specify as the column numbers.
+#' @param range range of \code{x} used for calculating mean value and sd value. Specify as the column numbers.
 #' @return spectral data applied the standard normal variate
 #'
 #' @examples
-#' dat.snv <- snv(dat)
+#' data(peach)
+#' nir.snv <- snv(peach$NIR)
 #'
+#' @name plsrauto
+#' @docType package
 #' @export
 
 snv <- function(x, range = c(1, ncol(x))){

@@ -5,11 +5,14 @@
 #' @return VIP values
 #'
 #' @examples
-#' yarn.pls <- plsr(density ~ NIR, 6, data = yarn, validation = "CV")
+#' data(yarn)
+#' yarn.pls <- plsr(density ~ NIR, 6, data = yarn, method = "oscorespls", validation = "CV")
 #' VIP(yarn.pls)
 #'
 #' @author Bjørn-Helge Mevik (bhx6@mevik.net)
 #'
+#' @name plsrauto
+#' @docType package
 #' @export
 
 ### VIP.R: Implementation of VIP (variable importance in projection)(*) for the

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ncompopt.R
 \name{ncompopt}
 \alias{ncompopt}
-\title{Determine the optimun number of components to include in the model}
+\title{Determine the optimal number of components to include in the model}
 \usage{
 ncompopt(x)
 }
@@ -10,18 +10,19 @@ ncompopt(x)
 \item{x}{RMSECV values calculated by the partial least squares regression}
 }
 \value{
-the optimun number of components
+the optimal number of components
 }
 \description{
-The function \code{ncompopt} determines the optimum number of components to include the model.
+The function \code{ncompopt} determines the optimal number of components to include the model.
 }
 \details{
 If \code{ncomp = "auto"}, the number of components with the minimum RMSECV is selected.
-If there is no component with the minimum RMSECV, the maximum number of components is selected.
-Then, if the last component does not improve the RMSECV by at least 2 percent, the last one excluded and so forth.
+If the selected n-th component with the minimum RMSECV does not improve the RMSECV by at least 2 percent, then (n-1)th compoment is selected and so forth.
 }
 \examples{
-ncomp <- ncompopt(x)
+data(peach)
+peach.pls <- plsr(Brix ~ NIR, ncomp = 15, data = peach, validation = "CV")
+ncompopt(RMSEP(peach.pls)$val[2,,])
 
 }
 \seealso{

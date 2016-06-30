@@ -5,8 +5,15 @@
 #' @return an object of class \code{list} containing the number of rows which have high and low peak values
 #'
 #' @examples
-#' rowpeak(x)
+#' data(peach)
+#' peach.pls <- plsr(Brix ~ NIR, ncomp = 15, data = peach, validation = "CV")
+#' plot(RMSEP(peach.pls))
+#' peak <- rowpeak(RMSEP(peach.pls)$val[2,,])
+#' peak$low
+#' RMSEP(peach.pls)$comps[peak$low]
 #'
+#' @name plsrauto
+#' @docType package
 #' @export
 
 rowpeak <- function(x){

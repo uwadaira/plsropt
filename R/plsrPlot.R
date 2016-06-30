@@ -1,7 +1,7 @@
-#' @title Draw important plots for the partial least squares regression at once
+#' @title Perform PLS regression and draw important plots at once
 #'
 #' @description The function \code{plsrPlot} performs the partial least squares (PLS) regression by using the function \code{\link{plsr}} in 'pls' package and draws four kinds of plots
-#' (cross-validation, variable importance [regression coefficient and variable importance in projection], loading, actual vs. predicted value) at once.
+#' (cross-validation, regression vector, variable importance [selectivity ratio and variable importance in projection], actual vs. predicted value) at once.
 #'
 #' @param formula	a model formula (see below).
 #' @param data an optional data frame with the data to fit the model form.
@@ -27,11 +27,17 @@
 #' @seealso \code{\link{ncompopt}}, \code{\link{plsr}}, \code{\link{lm}}
 #'
 #' @examples
-#' result <- plsrPlot(y = dat$Brix, x = x, ncomp = "auto", output = TRUE)
+#' data(peach)
+#' datTrain <- peach[1:50, ]
+#' datTest  <- peach[51:74, ]
+#' result <- plsrPlot(Brix ~ NIR, data = datTrain, testdata = datTest)
 #'
-#' result <- plsrPlot(y = dat.train$Brix, x = x.train,
-#'                    y.test=dat.test$Brix, x.test=x.test, ncomp = 5)
+#' # alternative way
+#' result <- plsrPlot(yTrain = datTrain$Brix, xTrain = datTrain$NIR, yTest=datTest$Brix, xTest=datTest$NIR)
 #'
+#' @name plsrauto
+#' @docType package
+#' @import pls
 #' @export
 
 plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
@@ -44,13 +50,13 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     d <- model.frame(formula, data = data)
     y <- d[[1]]
     x <- d[[2]]
-    x <- as.matrix(x)
   }else{
     if(is.null(yTrain)) stop("yTrain is not specified")
     y <- yTrain
     if(is.null(xTrain)) stop("xTrain is not specified")
-    x <- as.matrix(xTrain)
+    x <- xTrain
   }
+  x <- as.matrix(x)
 
   # Remove the observation of [y = NA]
   x <- x[!is.na(y), ]
@@ -69,13 +75,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
   # Number of components to be included in the model
   if(ncomp == "auto"){
-    RMSECV <- sqrt(c(result$validation$PRESS0, result$validation$PRESS)/(length(y)-1))
-    ncomp.opt <- ncompopt(RMSECV)
-    if(ncomp.opt == 1){
-      ncomp <- ncomp.opt
-    }else{
-      ncomp <- ncomp.opt - 1
-    }
+    ncomp <- ncompopt(RMSEP(result)$val[2,,])
   }
 
   result.ncomp <- plsr(y ~ x, ncomp=ncomp, method="oscorespls", validation = validation, segment.type = segment.type, ...)
@@ -135,6 +135,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
           yname <- terms(formula)[[2]]
         }else{
           if(is.null(yname)) stop("yname must be specified")
+          yname <- yname
         }
         dir <- paste("./PLSR_result", yname, sep = "/")
       }
@@ -151,43 +152,36 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     par(mfrow=c(2,2))
 
     # Cross-validation plot
-    plot(result, "validation", main="Cross-validation", legendpos = "topright")
+    plot(result, "validation", main="Cross-validation", legendpos = "topright", type = "b", lty = 1, pch = 16, col = c("royal blue", "red"), cex = 1.2)
 
-    # Plot predicted values vs. actual values
+    # Regression vector
+    plot(result, "coef", ncomp = ncomp, labels = "numbers", main=paste0("Regression vector (", ncomp, " comps)"))
+    abline(h=0, lty=2, col="red")
+    axis(1, tck = 1, col = "lightgrey", lty = "dotted")
+    box()
+
+    # Predicted values vs. actual values
     if(is.null(testdata)){  # Training set
-      xylim <- c(min(y, yhat.cal, yhat.val), max(y, yhat.cal, yhat.val))
-      plot(y, yhat.cal, type="p", pch=16, col="blue", asp=1, xlim=xylim, ylim=xylim, xlab="actual", ylab="predicted", main=paste("Actual vs. Predicted (", ncomp, " comps, Training set)", sep=""))
-      abline(a=0,b=1)
-      par(new = TRUE)
-      plot(y, yhat.val, type="p", pch=16, col="red", asp=1, xlim=xylim, ylim=xylim, axes=F, xlab="", ylab="", main="")
-      legend("topleft", legend=c("Calibration", "Validation"), pch=16, col=c("blue", "red"), bg="white")
-    }else{  # Test set
-      xylim <- c(min(y, yhat.cal, y.test, yhat.test), max(y, yhat.cal, y.test, yhat.test))
-      plot(y, yhat.cal, pch=16, col="blue", asp=1, xlim=xylim, ylim=xylim, xlab="actual value", ylab="predicted value", main=paste("Actual vs. Predicted (", ncomp, " comps, Test set)", sep=""))
-      abline(a=0,b=1)
-      par(new = TRUE)
-      plot(y.test, yhat.test, pch=16, col="red", asp=1, xlim=xylim, ylim=xylim, axes=F, main="", xlab="", ylab="")
-      legend("topleft", legend=c("Calibration", "Prediction"), pch=16, col=c("blue", "red"), bg="white")
-      box()
+      plot(result, ncomp = ncomp, asp = 1, line =T, pch = 21, bg = 2, cex = 1.2)
+      legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
+    }else{ # Test set
+      plot(y.test, yhat.test, pch = 21, bg = "red", asp = 1, xlab="actual value", ylab="predicted value", main=paste("Actual vs. Predicted (", ncomp, " comps, test)"))
+      abline(0, 1)
+      legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
     }
 
-    # Regression coefficient & VIP plot
-    plot(xvar, result$coefficients[, , ncomp], type="l", col="blue", xlab="variable", ylab="", main=paste("Variable importance (", ncomp, " comps)", sep=""))
-    abline(h=0, lty=2, col="blue")
+    # VIP & Selectivity ratio
+    sratio <- selectivityRatio(result, ncomp = ncomp)
+    plot(xvar, sratio, type="l", col="royal blue", xlab="variable", ylab="", main=paste0("Variable importance (", ncomp, " comps)"))
+    axis(2, col = "royal blue")
     par(new=T)
     plot(xvar, vip[, ncomp], type="l", col="red", axes=FALSE, xlab="", ylab="", main="")
-    axis(4)
+    axis(4, col = "red")
     abline(h=1, lty=2, col="red")
-    legend("topleft", legend=c("Regression coefficient", "VIP (right axis)"), lty=1, col=c("blue", "red"), bty="n")
+    axis(1, tck = 1, col = "lightgrey", lty = "dotted")
+    box()
+    legend("topleft", legend=c("Selectivity ratio", "VIP (right axis)"), lty=1, col=c("royal blue", "red"), bty="n")
 
-    # Loading plot
-    colsld <- seq(1, ncomp, by=1)
-    par(mar=c(5,4,4,5) + 0.1)
-    matplot(xvar, loading.weights(result)[,1:ncomp], type="l", lty=1, col=colsld, xlab="variable", ylab="", main="Loading")
-    abline(h=0, lty=2)
-    par(xpd=T)
-    label <- seq(1, ncomp, by=1)
-    legend(par()$usr[2], par()$usr[4], legend=label, col=colsld, lty=1, ncol=1)
     par(mar=c(5,4,4,2) + 0.1)
     par(xpd=F)
     par(mfrow=c(1,1)) # reset panel number
@@ -205,6 +199,8 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
               paste(dir, "regcoef.csv", sep="/"))
     write.csv(vip,
               paste(dir, "vip.csv", sep="/"))
+    write.csv(sratio,
+              paste(dir, "selectivityRatio.csv", sep="/"))
     write.csv(loading.weights(result)[,1:ncomp],
               paste(dir,"loading.csv", sep="/"))
 

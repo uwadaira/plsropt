@@ -11,8 +11,12 @@
 #' @seealso \code{\link{sgolayfilt}}
 #'
 #' @examples
-#' dat.sg1d <- mysgolay(dat, p = 2, n = 11, m = 1)
+#' data(peach)
+#' nir.1d <- matsgolay(peach$NIR, p = 2, n = 11, m = 1)
 #'
+#' @name plsrauto
+#' @docType package
+#' @import signal
 #' @export
 
 matsgolay <- function(x, ...){

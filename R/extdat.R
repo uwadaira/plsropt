@@ -7,14 +7,16 @@
 #' @return a new data set of class \code{data.frame} or \code{matrix}
 #'
 #' @examples
-#' x <- extdat(data, start = 700, end = 1050)
+#' data(peach)
+#' x <- extdat(peach$NIR, start = 700, end = 1050)
 #'
+#' @name plsrauto
+#' @docType package
 #' @export
 
 extdat <- function(x, start, end){
 
   x2 <- x[, which(colnames(x)==start) : which(colnames(x)==end)]
-  x2 <- as.matrix(x2)
 
   return(x2)
 }
