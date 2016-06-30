@@ -12,8 +12,6 @@
 #' peach.pls <- plsr(Brix ~ NIR, ncomp = 5, data = peach, validation = "CV")
 #' selectivityRatio(peach.pls)
 #'
-#' @name plsropt
-#' @docType package
 #' @export
 
 selectivityRatio <- function(mvr, ncomp = mvr$ncomp){

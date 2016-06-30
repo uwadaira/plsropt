@@ -11,8 +11,6 @@
 #'
 #' @author Bjørn-Helge Mevik (bhx6@mevik.net)
 #'
-#' @name plsropt
-#' @docType package
 #' @export
 
 ### VIP.R: Implementation of VIP (variable importance in projection)(*) for the

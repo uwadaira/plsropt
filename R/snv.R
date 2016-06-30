@@ -10,8 +10,6 @@
 #' data(peach)
 #' nir.snv <- snv(peach$NIR)
 #'
-#' @name plsropt
-#' @docType package
 #' @export
 
 snv <- function(x, range = c(1, ncol(x))){

@@ -35,8 +35,6 @@
 #' # alternative way
 #' result <- plsrPlot(yTrain = datTrain$Brix, xTrain = datTrain$NIR, yTest=datTest$Brix, xTest=datTest$NIR)
 #'
-#' @name plsropt
-#' @docType package
 #' @import pls
 #' @export
 

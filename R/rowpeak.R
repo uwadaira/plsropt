@@ -12,8 +12,6 @@
 #' peak$low
 #' RMSEP(peach.pls)$comps[peak$low]
 #'
-#' @name plsropt
-#' @docType package
 #' @export
 
 rowpeak <- function(x){

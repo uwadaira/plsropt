@@ -16,8 +16,6 @@
 #' peach.pls <- plsr(Brix ~ NIR, ncomp = 15, data = peach, validation = "CV")
 #' ncompopt(RMSEP(peach.pls)$val[2,,])
 #'
-#' @name plsropt
-#' @docType package
 #' @export
 
 ncompopt <- function(x){

@@ -27,8 +27,6 @@
 #' datTest  <- peach[51:74, ]
 #' result.all <- plsrauto(Brix ~ NIR, data = datTrain, testdata = datTest, xrange = list(c(700, 1098), c(1100, 2498)))
 #'
-#' @name plsropt
-#' @docType package
 #' @import signal
 #' @export
 

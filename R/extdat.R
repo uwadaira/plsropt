@@ -10,8 +10,6 @@
 #' data(peach)
 #' x <- extdat(peach$NIR, start = 700, end = 1050)
 #'
-#' @name plsropt
-#' @docType package
 #' @export
 
 extdat <- function(x, start, end){
