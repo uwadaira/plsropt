@@ -16,6 +16,6 @@ If you don't have `devtools` install yet, you will need to first install it.
 	
 The package vignette:
 
-[English version](https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0/)
+- [English version](https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0/)
 
-[Japanese version](https://sites.google.com/site/yuwadaira/R-package/plsropt).
+- [Japanese version](https://sites.google.com/site/yuwadaira/R-package/plsropt)
