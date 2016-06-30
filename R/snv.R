@@ -10,7 +10,7 @@
 #' data(peach)
 #' nir.snv <- snv(peach$NIR)
 #'
-#' @name plsrauto
+#' @name plsropt
 #' @docType package
 #' @export
 

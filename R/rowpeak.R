@@ -12,7 +12,7 @@
 #' peak$low
 #' RMSEP(peach.pls)$comps[peak$low]
 #'
-#' @name plsrauto
+#' @name plsropt
 #' @docType package
 #' @export
 

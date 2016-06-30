@@ -11,7 +11,7 @@
 #'
 #' @author Bjørn-Helge Mevik (bhx6@mevik.net)
 #'
-#' @name plsrauto
+#' @name plsropt
 #' @docType package
 #' @export
 

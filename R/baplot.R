@@ -14,7 +14,7 @@
 #' yhat <- peach.pls$fitted.values[, , 5]
 #' baplot(peach$Brix, yhat, sample = rownames(peach), nsd = 3)
 #'
-#' @name plsrauto
+#' @name plsropt
 #' @docType package
 #' @export
 #'

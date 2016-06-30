@@ -14,7 +14,7 @@
 #' data(peach)
 #' nir.1d <- matsgolay(peach$NIR, p = 2, n = 11, m = 1)
 #'
-#' @name plsrauto
+#' @name plsropt
 #' @docType package
 #' @import signal
 #' @export
