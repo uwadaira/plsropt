@@ -47,10 +47,13 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
   }
 
   if(output == TRUE){
-    if(!is.null(formula)){
-      dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
+    if(is.null(yname)){
+      if(!is.null(formula)){
+        dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
+      }else{
+        stop("yname must be specified")
+      }
     }else{
-      if(is.null(yname)) stop("yname must be specified")
       dir1 <- paste("./PLSR_auto", yname, sep = "/")
     }
     dir.create(dir1, showWarnings = FALSE, recursive = TRUE)
