@@ -163,7 +163,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
       plot(result, ncomp = ncomp, asp = 1, line =T, pch = 21, bg = 2, cex = 1.2)
       legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
     }else{ # Test set
-      plot(y.test, yhat.test, pch = 21, bg = "red", asp = 1, xlab="actual value", ylab="predicted value", main=paste("Actual vs. Predicted (", ncomp, " comps, test)"))
+      plot(y.test, yhat.test, pch = 21, bg = "red", asp = 1, xlab="actual value", ylab="predicted value", main=paste0("Actual vs. Predicted (", ncomp, " comps, test)"))
       abline(0, 1)
       legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
     }

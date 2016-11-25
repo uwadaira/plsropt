@@ -37,7 +37,9 @@ selectivityRatio <- function(mvr, ncomp = mvr$ncomp){
     V_ex <- var(t_TP %*% p_TP[i]) # explained variance
     V_re <- var(E_TPi) # residual variance
 
-    SR <- c(SR, V_ex/V_re)
+    if(is.nan(V_ex/V_re)){
+      SR <- c(SR, 0)
+    }else SR <- c(SR, V_ex/V_re)
   }
   return(SR)
 }
