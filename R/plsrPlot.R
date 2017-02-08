@@ -48,11 +48,15 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     d <- model.frame(formula, data = data)
     y <- d[[1]]
     x <- d[[2]]
+    if(is.null(rownames(data))) stop("Set the sample name as the row name of data.")
+    sampleTrain <- rownames(data)
   }else{
-    if(is.null(yTrain)) stop("yTrain is not specified")
+    if(is.null(yTrain)) stop("yTrain is not specified.")
     y <- yTrain
-    if(is.null(xTrain)) stop("xTrain is not specified")
+    if(is.null(xTrain)) stop("xTrain is not specified.")
     x <- xTrain
+    if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of xTrain.")
+    sampleTrain <- rownames(xTrain)
   }
   x <- as.matrix(x)
 
@@ -102,10 +106,14 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
       y.test <- d.test[[1]]
       x.test <- d.test[[2]]
       x.test <- as.matrix(x.test)
+      if(is.null(rownames(testdata))) stop("Set the sample name as the row name of testdata.")
+      sampleTest <- rownames(testdata)
     }else{
       if(is.null(yTest)) stop("yTest is not specified")
       y.test <- yTest
       x.test <- as.matrix(xTest)
+      if(is.null(rownames(xTest))) stop("Set the sample name as the row name of xTest.")
+      sampleTest <- rownames(xTest)
     }
 
     # Remove the observation with [y.test = NA]
@@ -191,7 +199,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
   if(output == TRUE){
     write.csv(stats,
               paste(dir, "stats.csv", sep="/"), row.names=FALSE)
-    write.csv(data.frame(y, yhat.cal, yhat.val),
+    write.csv(data.frame(sample=sampleTrain, y, yhat.cal, yhat.val),
               paste(dir, "fittedvalue.csv", sep="/"), row.names=FALSE)
     write.csv(coef(result, ncomp=ncomp, intercept=TRUE),
               paste(dir, "regcoef.csv", sep="/"))
@@ -203,7 +211,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
               paste(dir,"loading.csv", sep="/"))
 
     if(!is.null(testdata)){
-      write.csv(data.frame(y.test, yhat.test),
+      write.csv(data.frame(sample=sampleTest, y.test, yhat.test),
                 paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
     }
 

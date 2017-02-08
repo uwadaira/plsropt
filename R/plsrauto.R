@@ -39,11 +39,15 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
     dTrain <- model.frame(formula, data = data)
     yTrain <- dTrain[[1]]
     xTrain <- dTrain[[2]]
+    if(is.null(rownames(data))) stop("Set the sample name as the row name of data.")
+    sampleTrain <- rownames(data)
   }else{
     if(is.null(yTrain)) stop("yTrain is not specified")
     yTrain <- yTrain
     if(is.null(xTrain)) stop("xTrain is not specified")
     xTrain <- as.matrix(xTrain)
+    if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of xTrain.")
+    sampleTrain <- rownames(xTrain)
   }
 
   if(output == TRUE){
@@ -127,11 +131,13 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
             xTest   <- subset(xUse, set == "test")
             datTrain <- data.frame(y = yTrain, x = I(as.matrix(xTrain)))
             datTest  <- data.frame(y = yTest,  x = I(as.matrix(xTest)))
+            rownames(datTest)  <- sampleTest
           }else{
             xTrain   <- xUse
             datTrain <- data.frame(y = yTrain, x = I(as.matrix(xTrain)))
             datTest  <- NULL
           }
+          rownames(datTrain) <- sampleTrain
 
           if(output == TRUE){
             dir <- paste(dir1, rname, prename3, sep="/")
