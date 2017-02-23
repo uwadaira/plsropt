@@ -57,12 +57,13 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     x <- xTrain
     if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of xTrain.")
     sampleTrain <- rownames(xTrain)
+
+    # Remove the observations of [y = NA]
+    sampleTrain <- sampleTrain[!is.na(y)]
+    x <- x[!is.na(y), ]
+    y <- y[!is.na(y)]
   }
   x <- as.matrix(x)
-
-  # Remove the observation of [y = NA]
-  x <- x[!is.na(y), ]
-  y <- y[!is.na(y)]
 
   xvar <- as.numeric(colnames(x))
   if(is.na(range(xvar)[1])) xvar <- 1:ncol(x)

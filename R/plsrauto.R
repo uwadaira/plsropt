@@ -39,8 +39,8 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
     dTrain <- model.frame(formula, data = data)
     yTrain <- dTrain[[1]]
     xTrain <- dTrain[[2]]
-    if(is.null(rownames(data))) stop("Set the sample name as the row name of data.")
-    sampleTrain <- rownames(data)
+    if(is.null(rownames(dTrain))) stop("Set the sample name as the row name of data.")
+    sampleTrain <- rownames(dTrain)
   }else{
     if(is.null(yTrain)) stop("yTrain is not specified")
     yTrain <- yTrain
@@ -48,6 +48,11 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
     xTrain <- as.matrix(xTrain)
     if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of xTrain.")
     sampleTrain <- rownames(xTrain)
+    
+    # Remove the observations of [yTrain = NA]
+    sampleTrain <- sampleTrain[!is.na(yTrain)]
+    xTrain <- xTrain[!is.na(yTrain), ]
+    yTrain <- yTrain[!is.na(yTrain)]
   }
 
   if(output == TRUE){
