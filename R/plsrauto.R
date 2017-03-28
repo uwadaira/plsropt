@@ -35,25 +35,25 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
                      xrange = NULL, p = 2, n = 11, maxcomp = 10, plot = FALSE, output = FALSE, ...){
 
   if(!is.null(formula)){
-    if(is.null(data)) stop("'data' is not specified")
+    if(is.null(data)) stop("'data' is not specified.")
     if(is.null(rownames(data))) stop("Set the sample name as the row name of 'data'.")
-    sampleTrain <- rownames(data)
-    dTrain <- model.frame(formula, data = data)
+    dTrain <- model.frame(formula, data = data, na.action = na.omit)
     yTrain <- dTrain[[1]]
     xTrain <- dTrain[[2]]
-  }else{
-    if(is.null(yTrain)) stop("'yTrain' is not specified")
-    if(is.null(xTrain)) stop("'xTrain' is not specified")
-    if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of 'xTrain'.")
     sampleTrain <- rownames(xTrain)
+  }else{
+    if(is.null(yTrain)) stop("'yTrain' is not specified.")
+    if(is.null(xTrain)) stop("'xTrain' is not specified.")
+    if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of 'xTrain'.")
     yTrain <- yTrain
     xTrain <- as.matrix(xTrain)
-  }
+    sampleTrain <- rownames(xTrain)
 
-  # Remove the observations of [yTrain = NA]
-  sampleTrain <- sampleTrain[!is.na(yTrain)]
-  xTrain <- xTrain[!is.na(yTrain), ]
-  yTrain <- yTrain[!is.na(yTrain)]
+    # Remove the observations of [yTrain = NA]
+    sampleTrain <- sampleTrain[!is.na(yTrain)]
+    xTrain <- xTrain[!is.na(yTrain), ]
+    yTrain <- yTrain[!is.na(yTrain)]
+  }
 
   # Create a directory for storing the resulting files
   if(output == TRUE){
@@ -61,7 +61,7 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
       if(!is.null(formula)){
         dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
       }else{
-        stop("'yname' must be specified")
+        stop("'yname' must be specified.")
       }
     }else{
       dir1 <- paste("./PLSR_auto", yname, sep = "/")
@@ -72,17 +72,23 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
   if(!is.null(testdata) || !is.null(xTest)){ # In the case of using a test set
     if(!is.null(testdata)){
       if(is.null(rownames(testdata))) stop("Set the sample name as the row name of 'testdata'.")
-      sampleTest <- rownames(testdata)
-      dTest <- model.frame(formula, data = testdata)
+      dTest <- model.frame(formula, data = testdata, na.action = na.omit)
       yTest <- dTest[[1]]
       xTest <- dTest[[2]]
+      sampleTest <- rownames(xTest)
     }else if(!is.null(xTest)){
-      if(is.null(yTest)) stop("'yTest' is not specified")
+      if(is.null(yTest)) stop("'yTest' is not specified.")
       if(is.null(rownames(xTest))) stop("Set the sample name as the row name of 'xTest'.")
       sampleTest <- rownames(xTest)
       yTest <- yTest
       xTest <- as.matrix(xTest)
+
+      # Remove the observations of [yTest = NA]
+      sampleTest <- sampleTest[!is.na(yTest)]
+      xTest <- xTest[!is.na(yTest), ]
+      yTest <- yTest[!is.na(yTest)]
     }
+
     set <- c(rep("train", nrow(xTrain)), rep("test", nrow(xTest)))
     xAll <- rbind(xTrain, xTest)
     colnames(xAll) <- colnames(xTrain)
