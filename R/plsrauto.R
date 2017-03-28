@@ -48,7 +48,7 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
     xTrain <- as.matrix(xTrain)
     if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of xTrain.")
     sampleTrain <- rownames(xTrain)
-    
+
     # Remove the observations of [yTrain = NA]
     sampleTrain <- sampleTrain[!is.na(yTrain)]
     xTrain <- xTrain[!is.na(yTrain), ]
@@ -73,10 +73,12 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
       dTest <- model.frame(formula, data = testdata)
       yTest <- dTest[[1]]
       xTest <- dTest[[2]]
+      sampleTest <- rownames(testdata)
     }else if(!is.null(xTest)){
       if(is.null(yTest)) stop("yTest is not specified")
       yTest <- yTest
       xTest <- as.matrix(xTest)
+      sampleTest <- rownames(xTest)
     }
     set <- c(rep("train", nrow(xTrain)), rep("test", nrow(xTest)))
     xAll <- rbind(xTrain, xTest)
