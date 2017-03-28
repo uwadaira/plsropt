@@ -14,7 +14,7 @@
 #' First, standard normal variate (SNV) is applied or not.
 #' Second, Savitzky-Golay smoothing, 1st derivative or 2nd derivative is applied or not, respectively.
 #' Finally, auto-scaling is applied or not.
-#' Total 16 (2*4*2) kinds of preprocessing methods are applied and the results of PLS regressions are returned as an object of class \code{data.frame}.
+#' Total 16 (2*4*2) kinds of preprocessing methods are applied and the results of PLS regression are returned as an object of class \code{data.frame}.
 #' If \code{output == TRUE}, each PLS regression result is output as PDF and CSV files in one directory.
 #'
 #' @return an object of class \code{data.frame} containing the statistics of PLS regressions under the different combinations of X-variable range and preprocessing method is returned.
@@ -35,32 +35,33 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
                      xrange = NULL, p = 2, n = 11, maxcomp = 10, plot = FALSE, output = FALSE, ...){
 
   if(!is.null(formula)){
-    if(is.null(data)) stop("data is not specified")
+    if(is.null(data)) stop("'data' is not specified")
+    if(is.null(rownames(data))) stop("Set the sample name as the row name of 'data'.")
+    sampleTrain <- rownames(data)
     dTrain <- model.frame(formula, data = data)
     yTrain <- dTrain[[1]]
     xTrain <- dTrain[[2]]
-    if(is.null(rownames(dTrain))) stop("Set the sample name as the row name of data.")
-    sampleTrain <- rownames(dTrain)
   }else{
-    if(is.null(yTrain)) stop("yTrain is not specified")
-    yTrain <- yTrain
-    if(is.null(xTrain)) stop("xTrain is not specified")
-    xTrain <- as.matrix(xTrain)
-    if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of xTrain.")
+    if(is.null(yTrain)) stop("'yTrain' is not specified")
+    if(is.null(xTrain)) stop("'xTrain' is not specified")
+    if(is.null(rownames(xTrain))) stop("Set the sample name as the row name of 'xTrain'.")
     sampleTrain <- rownames(xTrain)
-
-    # Remove the observations of [yTrain = NA]
-    sampleTrain <- sampleTrain[!is.na(yTrain)]
-    xTrain <- xTrain[!is.na(yTrain), ]
-    yTrain <- yTrain[!is.na(yTrain)]
+    yTrain <- yTrain
+    xTrain <- as.matrix(xTrain)
   }
 
+  # Remove the observations of [yTrain = NA]
+  sampleTrain <- sampleTrain[!is.na(yTrain)]
+  xTrain <- xTrain[!is.na(yTrain), ]
+  yTrain <- yTrain[!is.na(yTrain)]
+
+  # Create a directory for storing the resulting files
   if(output == TRUE){
     if(is.null(yname)){
       if(!is.null(formula)){
         dir1 <- paste("./PLSR_auto", terms(formula)[[2]], sep = "/")
       }else{
-        stop("yname must be specified")
+        stop("'yname' must be specified")
       }
     }else{
       dir1 <- paste("./PLSR_auto", yname, sep = "/")
@@ -68,17 +69,19 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
     dir.create(dir1, showWarnings = FALSE, recursive = TRUE)
   }
 
-  if(!is.null(testdata) || !is.null(xTest)){
+  if(!is.null(testdata) || !is.null(xTest)){ # In the case of using a test set
     if(!is.null(testdata)){
+      if(is.null(rownames(testdata))) stop("Set the sample name as the row name of 'testdata'.")
+      sampleTest <- rownames(testdata)
       dTest <- model.frame(formula, data = testdata)
       yTest <- dTest[[1]]
       xTest <- dTest[[2]]
-      sampleTest <- rownames(testdata)
     }else if(!is.null(xTest)){
-      if(is.null(yTest)) stop("yTest is not specified")
+      if(is.null(yTest)) stop("'yTest' is not specified")
+      if(is.null(rownames(xTest))) stop("Set the sample name as the row name of 'xTest'.")
+      sampleTest <- rownames(xTest)
       yTest <- yTest
       xTest <- as.matrix(xTest)
-      sampleTest <- rownames(xTest)
     }
     set <- c(rep("train", nrow(xTrain)), rep("test", nrow(xTest)))
     xAll <- rbind(xTrain, xTest)

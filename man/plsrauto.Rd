@@ -35,7 +35,7 @@ Three steps of preprocessing are automatically applied to the X-variable data se
 First, standard normal variate (SNV) is applied or not.
 Second, Savitzky-Golay smoothing, 1st derivative or 2nd derivative is applied or not, respectively.
 Finally, auto-scaling is applied or not.
-Total 16 (2*4*2) kinds of preprocessing methods are applied and the results of PLS regressions are returned as an object of class \code{data.frame}.
+Total 16 (2*4*2) kinds of preprocessing methods are applied and the results of PLS regression are returned as an object of class \code{data.frame}.
 If \code{output == TRUE}, each PLS regression result is output as PDF and CSV files in one directory.
 }
 \examples{
