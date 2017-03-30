@@ -24,6 +24,9 @@
 #' @return If \code{return.stats = TRUE}, an object of class \code{data.frame} containing the statistics of PLS regression is returned.
 #' Otherwise, an object of class \code{mvr} is returned (see \code{\link{plsr}}).
 #'
+#' @references
+#' Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
+#'
 #' @seealso \code{\link{ncompopt}}, \code{\link{plsr}}, \code{\link{lm}}
 #'
 #' @examples

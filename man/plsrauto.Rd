@@ -45,6 +45,9 @@ datTest  <- peach[51:74, ]
 result.all <- plsrauto(Brix ~ NIR, data = datTrain, testdata = datTest, xrange = list(c(700, 1098), c(1100, 2498)))
 
 }
+\references{
+Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
+}
 \seealso{
 \code{\link{plsrPlot}}, \code{\link{plsr}}, \code{\link{lm}}
 }

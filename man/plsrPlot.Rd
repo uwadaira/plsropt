@@ -57,6 +57,9 @@ result <- plsrPlot(Brix ~ NIR, data = datTrain, testdata = datTest)
 result <- plsrPlot(yTrain = datTrain$Brix, xTrain = datTrain$NIR, yTest=datTest$Brix, xTest=datTest$NIR)
 
 }
+\references{
+Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
+}
 \seealso{
 \code{\link{ncompopt}}, \code{\link{plsr}}, \code{\link{lm}}
 }

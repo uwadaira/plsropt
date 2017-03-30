@@ -21,6 +21,9 @@
 #'
 #' @seealso \code{\link{plsrPlot}}, \code{\link{plsr}}, \code{\link{lm}}
 #'
+#' @references
+#' Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
+#'
 #' @examples
 #' data(peach)
 #' datTrain <- peach[1:50, ]
