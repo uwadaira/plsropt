@@ -10,7 +10,9 @@ plsrauto(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
   output = FALSE, ...)
 }
 \arguments{
-\item{formula}{a model formula like \code{y ~ x}. See \code{\link{plsr}} and \code{\link{lm}} for a detailed description.}
+\item{formula}{a model formula like \code{y ~ x}. See \code{\link{plsr}} for a detailed description.}
+
+\item{data}{an optional data frame with the data to fit the model from.}
 
 \item{testdata}{data set for prediction.}
 
@@ -20,9 +22,9 @@ plsrauto(formula = NULL, data = NULL, testdata = NULL, yTrain = NULL,
 
 \item{n}{filter length (window size) for Savitzky-Golay smoothing (must be odd. default value is 11).}
 
-\item{output}{if \code{TRUE}, the results are output as PDF and CSV files in the `PLSR_auto' directory.}
+\item{output}{if \code{TRUE}, the results are output as PDF and CSV files in the 'PLSR_auto' directory.}
 
-\item{...}{additional arguments passed to \code{\link{plsrPlot}} and \code{\link{plsr}} in 'pls' package.}
+\item{...}{additional arguments passed to \code{\link{plsr}} in 'pls' package.}
 }
 \value{
 an object of class \code{data.frame} containing the statistics of PLS regressions under the different combinations of X-variable range and preprocessing method is returned.
@@ -49,6 +51,6 @@ result.all <- plsrauto(Brix ~ NIR, data = datTrain, testdata = datTest, xrange =
 Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
 }
 \seealso{
-\code{\link{plsrPlot}}, \code{\link{plsr}}, \code{\link{lm}}
+\code{\link{plsrPlot}}, \code{\link{plsr}}
 }
 

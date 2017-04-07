@@ -2,13 +2,14 @@
 #'
 #' @description The function \code{plsrauto} performs the partial least squares (PLS) regressions under different combinations of X-variable range and preprocessing method automatically.
 #'
-#' @param formula	a model formula like \code{y ~ x}. See \code{\link{plsr}} and \code{\link{lm}} for a detailed description.
+#' @param formula	a model formula like \code{y ~ x}. See \code{\link{plsr}} for a detailed description.
+#' @param data an optional data frame with the data to fit the model from.
 #' @param testdata data set for prediction.
 #' @param xrange an object of class \code{list} which contains ranges of X-variables (see below).
 #' @param p filter order for Savitzky-Golay smoothing (default value is 2).
 #' @param n filter length (window size) for Savitzky-Golay smoothing (must be odd. default value is 11).
-#' @param output if \code{TRUE}, the results are output as PDF and CSV files in the `PLSR_auto' directory.
-#' @param ... additional arguments passed to \code{\link{plsrPlot}} and \code{\link{plsr}} in 'pls' package.
+#' @param output if \code{TRUE}, the results are output as PDF and CSV files in the 'PLSR_auto' directory.
+#' @param ... additional arguments passed to \code{\link{plsr}} in 'pls' package.
 #'
 #' @details Three steps of preprocessing are automatically applied to the X-variable data set.
 #' First, standard normal variate (SNV) is applied or not.
@@ -19,7 +20,7 @@
 #'
 #' @return an object of class \code{data.frame} containing the statistics of PLS regressions under the different combinations of X-variable range and preprocessing method is returned.
 #'
-#' @seealso \code{\link{plsrPlot}}, \code{\link{plsr}}, \code{\link{lm}}
+#' @seealso \code{\link{plsrPlot}}, \code{\link{plsr}}
 #'
 #' @references
 #' Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}

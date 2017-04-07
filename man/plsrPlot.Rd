@@ -43,15 +43,11 @@ The function \code{plsrPlot} performs the partial least squares (PLS) regression
 The \code{formula} argument should be a symbolic formula of the form \code{response ~ terms},
 where \code{response} is the name of the response vector
 and \code{terms} is the name of the predictor matrix, e.g., water ~ FTIR.
-See \code{\link{plsr}} and \code{\link{lm}} for a detailed description.
+See \code{\link{plsr}} for a detailed description.
 
 If \code{ncomp = "auto"}, the optimum number of components is automatically selected (see \code{\link{ncompopt}}).
 }
 \examples{
-data(peach)
-datTrain <- peach[1:50, ]
-datTest  <- peach[51:74, ]
-result <- plsrPlot(Brix ~ NIR, data = datTrain, testdata = datTest)
 
 # alternative way
 result <- plsrPlot(yTrain = datTrain$Brix, xTrain = datTrain$NIR, yTest=datTest$Brix, xTest=datTest$NIR)
@@ -61,6 +57,6 @@ result <- plsrPlot(yTrain = datTrain$Brix, xTrain = datTrain$NIR, yTest=datTest$
 Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
 }
 \seealso{
-\code{\link{ncompopt}}, \code{\link{plsr}}, \code{\link{lm}}
+\code{\link{ncompopt}}, \code{\link{plsr}}
 }
 

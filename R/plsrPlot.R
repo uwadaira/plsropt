@@ -17,7 +17,7 @@
 #' @details The \code{formula} argument should be a symbolic formula of the form \code{response ~ terms},
 #' where \code{response} is the name of the response vector
 #' and \code{terms} is the name of the predictor matrix, e.g., water ~ FTIR.
-#' See \code{\link{plsr}} and \code{\link{lm}} for a detailed description.
+#' See \code{\link{plsr}} for a detailed description.
 #'
 #' If \code{ncomp = "auto"}, the optimum number of components is automatically selected (see \code{\link{ncompopt}}).
 #'
@@ -27,13 +27,9 @@
 #' @references
 #' Vignette \url{https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0}
 #'
-#' @seealso \code{\link{ncompopt}}, \code{\link{plsr}}, \code{\link{lm}}
+#' @seealso \code{\link{ncompopt}}, \code{\link{plsr}}
 #'
 #' @examples
-#' data(peach)
-#' datTrain <- peach[1:50, ]
-#' datTest  <- peach[51:74, ]
-#' result <- plsrPlot(Brix ~ NIR, data = datTrain, testdata = datTest)
 #'
 #' # alternative way
 #' result <- plsrPlot(yTrain = datTrain$Brix, xTrain = datTrain$NIR, yTest=datTest$Brix, xTest=datTest$NIR)
@@ -171,13 +167,34 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     box()
 
     # Predicted values vs. actual values
-    if(is.null(testdata)){  # Training set
-      plot(result, ncomp = ncomp, asp = 1, line =T, pch = 21, bg = 2, cex = 1.2)
-      legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
-    }else{ # Test set
-      plot(y.test, yhat.test, pch = 21, bg = "red", asp = 1, xlab="actual value", ylab="predicted value", main=paste0("Actual vs. Predicted (", ncomp, " comps, test)"))
-      abline(0, 1)
-      legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
+    # if(is.null(testdata)){  # cross-validated predictions
+    #   plot(result, ncomp = ncomp, asp = 1, line =T, pch = 21, bg = 2, cex = 1.2)
+    #   legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
+    # }else{ # Test set
+    #   plot(y.test, yhat.test, pch = 21, bg = "red", asp = 1, xlab="actual value", ylab="predicted value", main=paste0("Actual vs. Predicted (", ncomp, " comps, test)"))
+    #   abline(0, 1)
+    #   legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
+    # }
+
+    if(is.null(testdata)){
+      x.range <- range(y)
+      y.range <- range(yhat.cal, yhat.val)
+      plot(y, yhat.cal, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 3, cex = 1.2, axes = F, xlab = "", ylab = "")
+      par(new=T)
+      plot(y, yhat.val, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 2, cex = 1.2)
+      abline(a = 0, b = 1)
+      abline(a = 0, b = 1)
+      legend("topleft", legend = c("Calibration", "Cross-valudation"), pch = 16, col = c(3, 2))
+      legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "val") == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
+    }else{
+      x.range <- range(y, y.test)
+      y.range <- range(yhat.cal, yhat.test)
+      plot(result$model$y, yhat.cal, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 3, cex = 1.2, axes = F, xlab = "", ylab = "")
+      par(new=T)
+      plot(y.test, yhat.test, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 2, cex = 1.2)
+      abline(a = 0, b = 1)
+      legend("topleft", legend = c("Calibration", "Prediction"), pch = 16, col = c(3, 2))
+      legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "test") == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
     }
 
     # VIP & Selectivity ratio
