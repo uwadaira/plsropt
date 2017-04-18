@@ -44,7 +44,7 @@ plsrauto <- function(formula = NULL, data = NULL, testdata = NULL,
     dTrain <- model.frame(formula, data = data, na.action = na.omit)
     yTrain <- dTrain[[1]]
     xTrain <- dTrain[[2]]
-    sampleTrain <- rownames(xTrain)
+    sampleTrain <- rownames(dTrain)
   }else{
     if(is.null(yTrain)) stop("'yTrain' is not specified.")
     if(is.null(xTrain)) stop("'xTrain' is not specified.")

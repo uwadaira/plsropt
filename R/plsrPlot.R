@@ -48,7 +48,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     y <- d[[1]]
     x <- d[[2]]
     if(is.null(rownames(data))) stop("Set the sample name as the row name of data.")
-    sampleTrain <- rownames(data)
+    sampleTrain <- rownames(d)
   }else{
     if(is.null(yTrain)) stop("yTrain is not specified.")
     y <- yTrain
@@ -167,15 +167,6 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     box()
 
     # Predicted values vs. actual values
-    # if(is.null(testdata)){  # cross-validated predictions
-    #   plot(result, ncomp = ncomp, asp = 1, line =T, pch = 21, bg = 2, cex = 1.2)
-    #   legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
-    # }else{ # Test set
-    #   plot(y.test, yhat.test, pch = 21, bg = "red", asp = 1, xlab="actual value", ylab="predicted value", main=paste0("Actual vs. Predicted (", ncomp, " comps, test)"))
-    #   abline(0, 1)
-    #   legend("bottomright", legend = as.expression(bquote(italic({R^2} == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
-    # }
-
     if(is.null(testdata)){
       x.range <- range(y)
       y.range <- range(yhat.cal, yhat.val)
@@ -185,7 +176,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
       abline(a = 0, b = 1)
       abline(a = 0, b = 1)
       legend("topleft", legend = c("Calibration", "Cross-valudation"), pch = 16, col = c(3, 2))
-      legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "val") == .(round(cor(y, yhat.val)^2, 2))))), cex = 1.2, bty = "n")
+      legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "cal") == .(round(cor(y, yhat.cal)^2, 2))))), cex = 1.2, bty = "n")
     }else{
       x.range <- range(y, y.test)
       y.range <- range(yhat.cal, yhat.test)
