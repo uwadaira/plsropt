@@ -70,6 +70,13 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
   # Maximum number of components
   if(maxcomp > length(y) - 2){maxcomp <- length(y) - 2}
 
+  # Boolean for executing prediction
+  if(!is.null(testdata) || !is.null(xTest)){
+    pred <- TRUE
+  }else{
+    pred <- FALSE
+  }
+
 ### Perform PLS regression
 
   result <- plsr(y ~ x, ncomp=maxcomp, method="oscorespls", validation = validation, segment.type = segment.type, ...)
@@ -99,8 +106,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
 ### Prediction with test set
 
-  if(!is.null(testdata) || !is.null(xTest)){
-
+  if(pred == TRUE){
     if(!is.null(testdata)){
       d.test <- model.frame(formula, data = testdata)
       y.test <- d.test[[1]]
@@ -167,7 +173,16 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     box()
 
     # Predicted values vs. actual values
-    if(is.null(testdata)){
+    if(pred == TRUE){
+      x.range <- range(y, y.test)
+      y.range <- range(yhat.cal, yhat.test)
+      plot(result$model$y, yhat.cal, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 3, cex = 1.2, axes = F, xlab = "", ylab = "")
+      par(new=T)
+      plot(y.test, yhat.test, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 2, cex = 1.2)
+      abline(a = 0, b = 1)
+      legend("topleft", legend = c("Calibration", "Prediction"), pch = 16, col = c(3, 2))
+      legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "test") == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
+    }else{
       x.range <- range(y)
       y.range <- range(yhat.cal, yhat.val)
       plot(y, yhat.cal, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 3, cex = 1.2, axes = F, xlab = "", ylab = "")
@@ -177,15 +192,6 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
       abline(a = 0, b = 1)
       legend("topleft", legend = c("Calibration", "Cross-valudation"), pch = 16, col = c(3, 2))
       legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "cal") == .(round(cor(y, yhat.cal)^2, 2))))), cex = 1.2, bty = "n")
-    }else{
-      x.range <- range(y, y.test)
-      y.range <- range(yhat.cal, yhat.test)
-      plot(result$model$y, yhat.cal, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 3, cex = 1.2, axes = F, xlab = "", ylab = "")
-      par(new=T)
-      plot(y.test, yhat.test, xlim = x.range, ylim = y.range, asp = 1, pch = 21, bg = 2, cex = 1.2)
-      abline(a = 0, b = 1)
-      legend("topleft", legend = c("Calibration", "Prediction"), pch = 16, col = c(3, 2))
-      legend("bottomright", legend = as.expression(bquote(italic(paste({R^2}, "test") == .(round(cor(y.test, yhat.test)^2, 2))))), cex = 1.2, bty = "n")
     }
 
     # VIP & Selectivity ratio
@@ -222,7 +228,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     write.csv(loading.weights(result)[,1:ncomp],
               paste(dir,"loading.csv", sep="/"))
 
-    if(!is.null(testdata)){
+    if(pred == TRUE){
       write.csv(data.frame(sample=sampleTest, y.test, yhat.test),
                 paste(dir, "fittedvalue_test.csv", sep="/"), row.names=FALSE)
     }
