@@ -89,6 +89,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
 
   result.ncomp <- plsr(y ~ x, ncomp=ncomp, method="oscorespls", validation = validation, segment.type = segment.type, ...)
 
+  y <- result$model$y
   yhat.cal <- result$fitted.values[, , ncomp]
   result.cal.lm <- lm(yhat.cal ~ y)
   Slope.cal <- result.cal.lm$coefficients[2]
