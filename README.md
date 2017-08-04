@@ -18,4 +18,4 @@ The package vignette:
 
 - [English version](https://www.gitbook.com/book/uwadaira/plsropt_vignette_ver1-2-0/)
 
-- [Japanese version](https://sites.google.com/site/yuwadaira/R-package/plsropt)
+- [Japanese version](https://sites.google.com/site/plsropt/)
