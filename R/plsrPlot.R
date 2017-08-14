@@ -67,7 +67,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
   xvar <- as.numeric(colnames(x))
   if(is.na(range(xvar)[1])) xvar <- 1:ncol(x)
 
-  # Maximum number of components
+  # Number of components considered
   if(maxcomp > length(y) - 2){maxcomp <- length(y) - 2}
 
   # Boolean for executing prediction
@@ -82,7 +82,7 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
   result <- plsr(y ~ x, ncomp=maxcomp, method="oscorespls", validation = validation, segment.type = segment.type, ...)
   vip <- VIP(result)
 
-  # Number of components to be included in the model
+  # Number of components used in the model
   if(ncomp == "auto"){
     ncomp <- ncompopt(RMSEP(result)$val[2,,])
   }
@@ -196,11 +196,16 @@ plsrPlot <- function(formula = NULL, data = NULL, testdata = NULL,
     }
 
     # VIP & Selectivity ratio
+    if(xvar[1] > xvar[length(xvar)]){
+      x.lim <- rev(range(xvar))
+    }else{
+      x.lim <- range(xvar)
+    }
     sratio <- selectivityRatio(result, ncomp = ncomp)
-    plot(xvar, sratio, type="l", col="royal blue", xlab="variable", ylab="", main=paste0("Variable importance (", ncomp, " comps)"))
+    plot(xvar, sratio, type="l", xlim=x.lim, col="royal blue", xlab="variable", ylab="", main=paste0("Variable importance (", ncomp, " comps)"))
     axis(2, col = "royal blue")
     par(new=T)
-    plot(xvar, vip[, ncomp], type="l", col="red", axes=FALSE, xlab="", ylab="", main="")
+    plot(xvar, vip[, ncomp], type="l", xlim=x.lim, col="red", axes=FALSE, xlab="", ylab="", main="")
     axis(4, col = "red")
     abline(h=1, lty=2, col="red")
     axis(1, tck = 1, col = "lightgrey", lty = "dotted")
