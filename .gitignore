@@ -1,11 +1,5 @@
-*.Rmd
-*.html
-peachNIR.csv
-peachVIS-NIR.csv
 PLSR_auto/
 PLSR_result/
-figures/
-*.pptx
 
 # R
 *.Rproj
